@@ -43,7 +43,9 @@ import java.util.Map;
 
 /**
  * 商品搜索管理Service实现类
- * Created by macro on 2018/6/19.
+ *
+ * @author xxz
+ * @date 2018/6/19
  */
 @Service
 public class EsProductServiceImpl implements EsProductService {
@@ -167,7 +169,6 @@ public class EsProductServiceImpl implements EsProductService {
         if (esProductList.size() > 0) {
             EsProduct esProduct = esProductList.get(0);
             String keyword = esProduct.getName();
-            Long brandId = esProduct.getBrandId();
             Long productCategoryId = esProduct.getProductCategoryId();
             //根据商品标题、品牌、分类进行搜索
             List<FunctionScoreQueryBuilder.FilterFunctionBuilder> filterFunctionBuilders = new ArrayList<>();
@@ -177,8 +178,6 @@ public class EsProductServiceImpl implements EsProductService {
                     ScoreFunctionBuilders.weightFactorFunction(2)));
             filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("keywords", keyword),
                     ScoreFunctionBuilders.weightFactorFunction(2)));
-            filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("brandId", brandId),
-                    ScoreFunctionBuilders.weightFactorFunction(10)));
             filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("productCategoryId", productCategoryId),
                     ScoreFunctionBuilders.weightFactorFunction(6)));
             FunctionScoreQueryBuilder.FilterFunctionBuilder[] builders = new FunctionScoreQueryBuilder.FilterFunctionBuilder[filterFunctionBuilders.size()];
@@ -224,6 +223,46 @@ public class EsProductServiceImpl implements EsProductService {
             LOGGER.info("DSL:{}",searchQuery.getQuery().toString());
             return convertProductRelatedInfo(response);
         });
+    }
+
+
+    @Override
+    public Page<EsProduct> searchWithCate(String cateId, String keyword, Integer pageNum, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
+        //分页
+        nativeSearchQueryBuilder.withPageable(pageable);
+        //过滤
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        if (cateId != null) {
+            boolQueryBuilder.must(QueryBuilders.termQuery("productCategoryId", cateId));
+        }
+        nativeSearchQueryBuilder.withFilter(boolQueryBuilder);
+
+        //搜索
+        if (StringUtils.isEmpty(keyword)) {
+            nativeSearchQueryBuilder.withQuery(QueryBuilders.matchAllQuery());
+        } else {
+            List<FunctionScoreQueryBuilder.FilterFunctionBuilder> filterFunctionBuilders = new ArrayList<>();
+            filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("name", keyword),
+                    ScoreFunctionBuilders.weightFactorFunction(10)));
+            filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("subTitle", keyword),
+                    ScoreFunctionBuilders.weightFactorFunction(5)));
+            filterFunctionBuilders.add(new FunctionScoreQueryBuilder.FilterFunctionBuilder(QueryBuilders.matchQuery("keywords", keyword),
+                    ScoreFunctionBuilders.weightFactorFunction(2)));
+            FunctionScoreQueryBuilder.FilterFunctionBuilder[] builders = new FunctionScoreQueryBuilder.FilterFunctionBuilder[filterFunctionBuilders.size()];
+            filterFunctionBuilders.toArray(builders);
+            FunctionScoreQueryBuilder functionScoreQueryBuilder = QueryBuilders.functionScoreQuery(builders)
+                    .scoreMode(FunctionScoreQuery.ScoreMode.SUM)
+                    .setMinScore(2);
+            nativeSearchQueryBuilder.withQuery(functionScoreQueryBuilder);
+        }
+
+        nativeSearchQueryBuilder.withSort(SortBuilders.scoreSort().order(SortOrder.DESC));
+        NativeSearchQuery searchQuery = nativeSearchQueryBuilder.build();
+        LOGGER.info("DSL:{}", searchQuery.getQuery().toString());
+        return productRepository.search(searchQuery);
+
     }
 
     /**

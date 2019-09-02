@@ -12,6 +12,7 @@ public class PmsSkuStock implements Serializable {
     @ApiModelProperty(value = "sku编码")
     private String skuCode;
 
+    @ApiModelProperty(value = "产品售价")
     private BigDecimal price;
 
     @ApiModelProperty(value = "库存")
@@ -23,21 +24,26 @@ public class PmsSkuStock implements Serializable {
     @ApiModelProperty(value = "销售属性1")
     private String sp1;
 
+    @ApiModelProperty(value = "销售属性2")
     private String sp2;
 
+    @ApiModelProperty(value = "销售属性3")
     private String sp3;
 
     @ApiModelProperty(value = "展示图片")
     private String pic;
 
-    @ApiModelProperty(value = "销量")
+    @ApiModelProperty(value = "签约量")
     private Integer sale;
-
-    @ApiModelProperty(value = "单品促销价格")
-    private BigDecimal promotionPrice;
 
     @ApiModelProperty(value = "锁定库存")
     private Integer lockStock;
+
+    @ApiModelProperty(value = "每期价格")
+    private BigDecimal eachPrice;
+
+    @ApiModelProperty(value = "成本价格")
+    private BigDecimal costPrice;
 
     private static final long serialVersionUID = 1L;
 
@@ -129,20 +135,28 @@ public class PmsSkuStock implements Serializable {
         this.sale = sale;
     }
 
-    public BigDecimal getPromotionPrice() {
-        return promotionPrice;
-    }
-
-    public void setPromotionPrice(BigDecimal promotionPrice) {
-        this.promotionPrice = promotionPrice;
-    }
-
     public Integer getLockStock() {
         return lockStock;
     }
 
     public void setLockStock(Integer lockStock) {
         this.lockStock = lockStock;
+    }
+
+    public BigDecimal getEachPrice() {
+        return eachPrice;
+    }
+
+    public void setEachPrice(BigDecimal eachPrice) {
+        this.eachPrice = eachPrice;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
     }
 
     @Override
@@ -162,8 +176,9 @@ public class PmsSkuStock implements Serializable {
         sb.append(", sp3=").append(sp3);
         sb.append(", pic=").append(pic);
         sb.append(", sale=").append(sale);
-        sb.append(", promotionPrice=").append(promotionPrice);
         sb.append(", lockStock=").append(lockStock);
+        sb.append(", eachPrice=").append(eachPrice);
+        sb.append(", costPrice=").append(costPrice);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

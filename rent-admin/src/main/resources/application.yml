@@ -2,10 +2,14 @@ spring:
   profiles:
     active: dev #默认为开发环境
 
+
 mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
   mapper-locations:
     - classpath:dao/*.xml
     - classpath*:com/**/mapper/*.xml
+
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
@@ -25,8 +29,8 @@ redis:
 aliyun:
   oss:
     endpoint: oss-cn-hangzhou.aliyuncs.com
-    accessKeyId: LTAIvW2c3gYVgx2L
-    accessKeySecret:
+    accessKeyId: LTAIdF00HsZdZi3k
+    accessKeySecret: NBb4yxDYb5El4vMyRkGxIlWv0crwvA
     bucketName: xiaoxiangzu
     policy:
       expire: 300
@@ -34,6 +38,8 @@ aliyun:
     callback: http://localhost:8080/aliyun/oss/callback
     dir:
       prefix: images/
+
+
 
 logging:
   level:

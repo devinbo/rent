@@ -1,5 +1,7 @@
 package com.xxz.rent.portal.model.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 import lombok.Getter;
 
 /**
@@ -35,4 +37,5 @@ public enum QueueEnum {
         this.name = name;
         this.routeKey = routeKey;
     }
+
 }

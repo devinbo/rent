@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.UmsProductApplyDao">
+
+    <select id="productApplyDao" resultType="com.xxz.rent.portal.model.dto.PreOrderResult">
+        select p.id productId,  p.name, p.pic, concat(sk.sp1, ';', sk.sp2, ';', sk.sp3) sp,
+        p.unit, p.period, p.promotion_type, p.first_each_price_sub,
+        sk.id skuId, sk.each_price, sk.price
+        from pms_product p
+        left join pms_sku_stock sk on p.id = sk.product_id
+        where p.delete_status = 0 and p.publish_status = 1
+        and sk.id = #{skuId}
+    </select>
+
+    <select id="getCanUseCoupon" resultType="com.xxz.rent.portal.model.dto.PreOrderResult$CouponUseInfo">
+        select c.amount, c.min_point, c.start_time, c.end_time, c.name,
+            sch.id
+         from sms_coupon_history sch
+        left join sms_coupon c on sch.coupon_id = c.id
+        where sch.use_status = 0 and sch.member_id = #{memberId}
+        and (c.cate = 0 or c.cate = 1)
+        and ((c.use_type = 0)
+            or (c.use_type = 1
+                and (select count(*) from sms_coupon_product_category_relation
+                    where product_category_id = #{productCategoryId} and coupon_id = c.id) > 0)
+            or (c.use_type = 2 and (select count(*) from sms_coupon_product_relation
+                    where product_id = #{productId}) > 0))
+        and start_time  &lt;  now() and end_time > now()
+    </select>
+
+</mapper>

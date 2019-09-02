@@ -60,5 +60,15 @@ public class RedisServiceImpl implements RedisService {
         redisTemplate.opsForValue().set(key, value, expire, TimeUnit.SECONDS);
     }
 
+    @Override
+    public void addList(String key, Object value) {
+        redisTemplate.opsForList().rightPush(key, value);
+    }
+
+    @Override
+    public void getList(String key, long len) {
+        redisTemplate.opsForList().range(key, 0, len);
+    }
+
 
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.PmsProductDao">
+
+    <resultMap id="PmsProductResultMap" type="com.xxz.rent.portal.model.dto.PmsProductResult"
+               extends="com.xxz.rent.mapper.PmsProductMapper.BaseResultMap">
+        <collection property="pmsSkuStockList" column="id" select="getProductSkuList" />
+    </resultMap>
+
+
+    <select id="getProductAttributeList" resultType="com.xxz.rent.portal.model.dto.SkuProps">
+        select pa.name, pav.value  from pms_product_attribute_value pav
+         left join pms_product_attribute pa on pav.product_attribute_id = pa.id
+         where pav.product_id = #{id}
+    </select>
+
+    <select id="getProductSkuList" resultType="com.xxz.rent.model.PmsSkuStock">
+        select * from pms_sku_stock where product_id = #{id}
+    </select>
+
+    <select id="getProductDetail" resultMap="PmsProductResultMap">
+        select * from pms_product where id = #{id}
+    </select>
+
+    <select id="getProductSkuAttributes" resultType="Map">
+        select name, input_list vals from pms_product_attribute
+        where product_attribute_category_id = #{productAttributeCategoryId}
+    </select>
+
+    <select id="getProductBySkuId" resultType="com.xxz.rent.model.PmsProduct">
+        select * from pms_product where id = (select product_id from pms_sku_stock where id = #{skuId})
+    </select>
+
+
+</mapper>

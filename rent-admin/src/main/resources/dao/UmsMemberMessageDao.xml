@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.dao.UmsMemberMessageDao">
+
+    <select id="list" resultType="com.xxz.rent.dto.MemberMessageResult">
+        select umm.*, um.name memberName, um.phone memberPhone from ums_member_message umm
+        left join ums_member um on umm.member_id = um.id
+        where delete_status = 0
+        <if test="name != '' and name != null">
+            and (um.name like concat('%', #{name}, '%')
+                or um.phone like concat('%', #{name}, '%'))
+        </if>
+        order by umm.create_time desc
+    </select>
+
+    <select id="getMessage" resultType="com.xxz.rent.dto.MemberMessageResult">
+        select umm.*, um.name memberName, um.phone memberPhone from ums_member_message umm
+        left join ums_member um on umm.member_id = um.id
+        where delete_status = 0 and umm.id = #{id}
+    </select>
+
+</mapper>

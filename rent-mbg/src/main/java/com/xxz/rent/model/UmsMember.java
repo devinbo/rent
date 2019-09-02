@@ -2,12 +2,11 @@ package com.xxz.rent.model;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UmsMember implements Serializable {
     private Long id;
-
-    private Long memberLevelId;
 
     @ApiModelProperty(value = "昵称")
     private String nickname;
@@ -48,11 +47,62 @@ public class UmsMember implements Serializable {
     @ApiModelProperty(value = "成长值")
     private Integer growth;
 
-    @ApiModelProperty(value = "剩余抽奖次数")
-    private Integer luckeyCount;
-
     @ApiModelProperty(value = "历史积分数量")
     private Integer historyIntegration;
+
+    @ApiModelProperty(value = "自营订单数量")
+    private Integer orderCount;
+
+    @ApiModelProperty(value = "个人出租总数")
+    private Integer rentCount;
+
+    @ApiModelProperty(value = "个人租用总数")
+    private Integer hireCount;
+
+    @ApiModelProperty(value = "真实姓名")
+    private String name;
+
+    @ApiModelProperty(value = "全部认证: 0->为认证 1->已全部认证")
+    private Integer completeStatus;
+
+    @ApiModelProperty(value = "基本资料: 0->待完善 1->已完善")
+    private Integer baseinfoStatus;
+
+    @ApiModelProperty(value = "微信openid")
+    private String wechatOpenid;
+
+    @ApiModelProperty(value = "微信昵称")
+    private String wechatNick;
+
+    @ApiModelProperty(value = "微信头像")
+    private String wechatHeadPic;
+
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    @ApiModelProperty(value = "客户备注")
+    private String note;
+
+    @ApiModelProperty(value = "客户免押额度")
+    private BigDecimal freeMoney;
+
+    @ApiModelProperty(value = "微信省份")
+    private String wechatProvince;
+
+    @ApiModelProperty(value = "微信城市")
+    private String wechatCity;
+
+    @ApiModelProperty(value = "微信国家")
+    private String wechatCountry;
+
+    @ApiModelProperty(value = "信誉度：0->优； 1-良好；2->一般； 3->欠佳； 4->差")
+    private Integer creditworthiness;
+
+    @ApiModelProperty(value = "支付宝账号")
+    private String alipayNo;
+
+    @ApiModelProperty(value = "微信账号")
+    private String wechatNo;
 
     private static final long serialVersionUID = 1L;
 
@@ -62,14 +112,6 @@ public class UmsMember implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getMemberLevelId() {
-        return memberLevelId;
-    }
-
-    public void setMemberLevelId(Long memberLevelId) {
-        this.memberLevelId = memberLevelId;
     }
 
     public String getNickname() {
@@ -176,20 +218,156 @@ public class UmsMember implements Serializable {
         this.growth = growth;
     }
 
-    public Integer getLuckeyCount() {
-        return luckeyCount;
-    }
-
-    public void setLuckeyCount(Integer luckeyCount) {
-        this.luckeyCount = luckeyCount;
-    }
-
     public Integer getHistoryIntegration() {
         return historyIntegration;
     }
 
     public void setHistoryIntegration(Integer historyIntegration) {
         this.historyIntegration = historyIntegration;
+    }
+
+    public Integer getOrderCount() {
+        return orderCount;
+    }
+
+    public void setOrderCount(Integer orderCount) {
+        this.orderCount = orderCount;
+    }
+
+    public Integer getRentCount() {
+        return rentCount;
+    }
+
+    public void setRentCount(Integer rentCount) {
+        this.rentCount = rentCount;
+    }
+
+    public Integer getHireCount() {
+        return hireCount;
+    }
+
+    public void setHireCount(Integer hireCount) {
+        this.hireCount = hireCount;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getCompleteStatus() {
+        return completeStatus;
+    }
+
+    public void setCompleteStatus(Integer completeStatus) {
+        this.completeStatus = completeStatus;
+    }
+
+    public Integer getBaseinfoStatus() {
+        return baseinfoStatus;
+    }
+
+    public void setBaseinfoStatus(Integer baseinfoStatus) {
+        this.baseinfoStatus = baseinfoStatus;
+    }
+
+    public String getWechatOpenid() {
+        return wechatOpenid;
+    }
+
+    public void setWechatOpenid(String wechatOpenid) {
+        this.wechatOpenid = wechatOpenid;
+    }
+
+    public String getWechatNick() {
+        return wechatNick;
+    }
+
+    public void setWechatNick(String wechatNick) {
+        this.wechatNick = wechatNick;
+    }
+
+    public String getWechatHeadPic() {
+        return wechatHeadPic;
+    }
+
+    public void setWechatHeadPic(String wechatHeadPic) {
+        this.wechatHeadPic = wechatHeadPic;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public BigDecimal getFreeMoney() {
+        return freeMoney;
+    }
+
+    public void setFreeMoney(BigDecimal freeMoney) {
+        this.freeMoney = freeMoney;
+    }
+
+    public String getWechatProvince() {
+        return wechatProvince;
+    }
+
+    public void setWechatProvince(String wechatProvince) {
+        this.wechatProvince = wechatProvince;
+    }
+
+    public String getWechatCity() {
+        return wechatCity;
+    }
+
+    public void setWechatCity(String wechatCity) {
+        this.wechatCity = wechatCity;
+    }
+
+    public String getWechatCountry() {
+        return wechatCountry;
+    }
+
+    public void setWechatCountry(String wechatCountry) {
+        this.wechatCountry = wechatCountry;
+    }
+
+    public Integer getCreditworthiness() {
+        return creditworthiness;
+    }
+
+    public void setCreditworthiness(Integer creditworthiness) {
+        this.creditworthiness = creditworthiness;
+    }
+
+    public String getAlipayNo() {
+        return alipayNo;
+    }
+
+    public void setAlipayNo(String alipayNo) {
+        this.alipayNo = alipayNo;
+    }
+
+    public String getWechatNo() {
+        return wechatNo;
+    }
+
+    public void setWechatNo(String wechatNo) {
+        this.wechatNo = wechatNo;
     }
 
     @Override
@@ -199,7 +377,6 @@ public class UmsMember implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", memberLevelId=").append(memberLevelId);
         sb.append(", nickname=").append(nickname);
         sb.append(", phone=").append(phone);
         sb.append(", status=").append(status);
@@ -213,8 +390,25 @@ public class UmsMember implements Serializable {
         sb.append(", sourceType=").append(sourceType);
         sb.append(", integration=").append(integration);
         sb.append(", growth=").append(growth);
-        sb.append(", luckeyCount=").append(luckeyCount);
         sb.append(", historyIntegration=").append(historyIntegration);
+        sb.append(", orderCount=").append(orderCount);
+        sb.append(", rentCount=").append(rentCount);
+        sb.append(", hireCount=").append(hireCount);
+        sb.append(", name=").append(name);
+        sb.append(", completeStatus=").append(completeStatus);
+        sb.append(", baseinfoStatus=").append(baseinfoStatus);
+        sb.append(", wechatOpenid=").append(wechatOpenid);
+        sb.append(", wechatNick=").append(wechatNick);
+        sb.append(", wechatHeadPic=").append(wechatHeadPic);
+        sb.append(", email=").append(email);
+        sb.append(", note=").append(note);
+        sb.append(", freeMoney=").append(freeMoney);
+        sb.append(", wechatProvince=").append(wechatProvince);
+        sb.append(", wechatCity=").append(wechatCity);
+        sb.append(", wechatCountry=").append(wechatCountry);
+        sb.append(", creditworthiness=").append(creditworthiness);
+        sb.append(", alipayNo=").append(alipayNo);
+        sb.append(", wechatNo=").append(wechatNo);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

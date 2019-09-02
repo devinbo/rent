@@ -11,6 +11,7 @@ public class SmsCouponHistory implements Serializable {
 
     private Long memberId;
 
+    @ApiModelProperty(value = "优惠券码")
     private String couponCode;
 
     @ApiModelProperty(value = "领取人昵称")

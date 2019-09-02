@@ -1,6 +1,8 @@
 package com.xxz.rent.common.api;
 
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -10,10 +12,15 @@ import java.util.List;
  * Created by macro on 2019/4/19.
  */
 public class CommonPage<T> {
+    @ApiModelProperty("当前页")
     private Integer pageNum;
+    @ApiModelProperty("每页大小")
     private Integer pageSize;
+    @ApiModelProperty("总页数")
     private Integer totalPage;
+    @ApiModelProperty("总记录数")
     private Long total;
+    @ApiModelProperty("数据列表")
     private List<T> list;
 
     /**

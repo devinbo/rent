@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.OmsOrderDao">
+    <select id="countBySameProduct" resultType="java.lang.Boolean">
+        select count(0) from oms_order o
+        left join oms_order_item i on o.id = i.order_id
+        where i.product_id = #{porductId}
+        and o.status in (0, 1, 2, 7, 8, 9) and delete_status = 0
+    </select>
+
+    <select id="list" resultType="com.xxz.rent.portal.model.dto.OmsOrderResult">
+        select o.*, i.product_name, i.product_pic, i.product_attr
+         from oms_order o
+        left join oms_order_item i on o.id = i.order_id
+        where o.delete_status = 0 and o.member_id = #{memberId}
+        <!-- 查询签约中订单 -->
+        <if test="status == 1">
+            and o.status = 2
+        </if>
+        <!-- 查询已完成订单 -->
+        <if test="status == 2">
+            and (o.status = 3 or o.status = 4)
+        </if>
+        <!-- 查询已取消订单 -->
+        <if test="status == 3">
+            and o.status = 5
+        </if>
+        order by create_time desc
+    </select>
+
+    <select id="getOrderDetail" resultType="com.xxz.rent.portal.model.dto.OmsOrderResult">
+        select o.*, i.product_name, i.product_pic, i.product_attr
+        from oms_order o
+        left join oms_order_item i on o.id = i.order_id
+        where o.delete_status = 0 and o.member_id = #{memberId}
+        and o.id = #{id}
+    </select>
+</mapper>

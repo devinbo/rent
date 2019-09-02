@@ -2,6 +2,7 @@ package com.xxz.rent.controller;
 
 import com.xxz.rent.common.api.CommonPage;
 import com.xxz.rent.common.api.CommonResult;
+import com.xxz.rent.dto.PageParam;
 import com.xxz.rent.dto.PmsProductParam;
 import com.xxz.rent.dto.PmsProductQueryParam;
 import com.xxz.rent.dto.PmsProductResult;
@@ -22,7 +23,7 @@ import java.util.List;
 
 /**
  * 商品管理Controller
- * Created by macro on 2018/4/26.
+ * @author xxz
  */
 @Controller
 @Api(tags = "PmsProductController", description = "商品管理")
@@ -47,7 +48,6 @@ public class PmsProductController {
     @ApiOperation("根据商品id获取商品编辑信息")
     @RequestMapping(value = "/updateInfo/{id}", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAuthority('pms:product:read')")
     public CommonResult<PmsProductResult> getUpdateInfo(@PathVariable Long id) {
         PmsProductResult productResult = productService.getUpdateInfo(id);
         return CommonResult.success(productResult);
@@ -69,11 +69,19 @@ public class PmsProductController {
     @ApiOperation("查询商品")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    @PreAuthorize("hasAuthority('pms:product:read')")
     public CommonResult<CommonPage<PmsProduct>> getList(PmsProductQueryParam productQueryParam,
                                                         @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                         @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<PmsProduct> productList = productService.list(productQueryParam, pageSize, pageNum);
+        return CommonResult.success(CommonPage.restPage(productList));
+    }
+
+
+    @ApiOperation("查询二手商品")
+    @RequestMapping(value = "/usedList", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<CommonPage<PmsProduct>> getUsedList(PageParam pageParam) {
+        List<PmsProduct> productList = productService.getUsedList(pageParam);
         return CommonResult.success(CommonPage.restPage(productList));
     }
 
@@ -155,4 +163,41 @@ public class PmsProductController {
             return CommonResult.failed();
         }
     }
+
+    @ApiOperation("根据商品名称或货号模糊查询")
+    @RequestMapping(value = "/list/cate-id/{cateId}", method = RequestMethod.GET)
+    @ResponseBody
+    public CommonResult<CommonPage<PmsProduct>> getProductByCateId(@PathVariable("cateId") Long cateId, PageParam pageParam) {
+        List<PmsProduct> productList = productService.getProductByCateId(cateId, pageParam);
+        return CommonResult.success(CommonPage.restPage(productList));
+    }
+
+    @ApiOperation("修改产品分类信息")
+    @RequestMapping(value = "/update-cate/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pms:product:delete')")
+    public CommonResult updateCate(@PathVariable("id") Long id,
+                                           @RequestBody PmsProduct pmsProduct) {
+        int count = productService.updateCate(id, pmsProduct);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+    @ApiOperation("移除产品到分类信息")
+    @RequestMapping(value = "/delete-cate/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pms:product:delete')")
+    public CommonResult deleteCate(@PathVariable("id") Long id) {
+        int count = productService.deleteCate(id);
+        if (count > 0) {
+            return CommonResult.success(count);
+        } else {
+            return CommonResult.failed();
+        }
+    }
+
+
 }

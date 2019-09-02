@@ -4,6 +4,7 @@ import com.xxz.rent.common.api.CommonPage;
 import com.xxz.rent.common.api.CommonResult;
 import com.xxz.rent.dto.PmsProductCategoryParam;
 import com.xxz.rent.dto.PmsProductCategoryWithChildrenItem;
+import com.xxz.rent.model.PmsProduct;
 import com.xxz.rent.model.PmsProductCategory;
 import com.xxz.rent.service.PmsProductCategoryService;
 import com.xxz.rent.common.api.CommonPage;
@@ -22,7 +23,7 @@ import java.util.List;
 
 /**
  * 商品分类模块Controller
- * Created by macro on 2018/4/26.
+ * @author xxz
  */
 @Controller
 @Api(tags = "PmsProductCategoryController", description = "商品分类管理")
@@ -128,4 +129,6 @@ public class PmsProductCategoryController {
         List<PmsProductCategoryWithChildrenItem> list = productCategoryService.listWithChildren();
         return CommonResult.success(list);
     }
+
+
 }

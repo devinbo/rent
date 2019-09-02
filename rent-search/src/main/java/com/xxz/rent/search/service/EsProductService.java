@@ -50,4 +50,16 @@ public interface EsProductService {
      * 获取搜索词相关品牌、分类、属性
      */
     EsProductRelatedInfo searchRelatedInfo(String keyword);
+
+    /**  功能描述 <br>
+     * <搜索某一分类下的产品>
+     *
+     * @param cateId
+     * @param keyword
+     * @param pageNum
+     * @param pageSize
+     * @return org.springframework.data.domain.Page<com.xxz.rent.search.domain.EsProduct>
+     * @date 2019-07-30 14:40
+     */
+    Page<EsProduct> searchWithCate(String cateId, String keyword, Integer pageNum, Integer pageSize);
 }

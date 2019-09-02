@@ -4,6 +4,7 @@ import com.xxz.rent.bo.AdminUserDetails;
 import com.xxz.rent.component.JwtAuthenticationTokenFilter;
 import com.xxz.rent.component.RestAuthenticationEntryPoint;
 import com.xxz.rent.component.RestfulAccessDeniedHandler;
+import com.xxz.rent.constant.SysConstant;
 import com.xxz.rent.model.UmsAdmin;
 import com.xxz.rent.model.UmsPermission;
 import com.xxz.rent.service.UmsAdminService;
@@ -13,6 +14,7 @@ import com.xxz.rent.component.RestfulAccessDeniedHandler;
 import com.xxz.rent.model.UmsAdmin;
 import com.xxz.rent.model.UmsPermission;
 import com.xxz.rent.service.UmsAdminService;
+import com.xxz.rent.service.UmsPermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -49,18 +51,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UmsAdminService adminService;
     @Autowired
+    private UmsPermissionService umsPermissionService;
+    @Autowired
     private RestfulAccessDeniedHandler restfulAccessDeniedHandler;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity.headers().frameOptions().disable();
         httpSecurity.csrf()// 由于使用的是JWT，我们这里不需要csrf
                 .disable()
+                .cors()
+                .and()
                 .sessionManagement()// 基于token，所以不需要session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
                         "/",
                         "/*.html",
@@ -81,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()// 除上面外的所有请求全部需要鉴权认证
                 .authenticated();
         // 禁用缓存
-        httpSecurity.headers().cacheControl().disable();
+        httpSecurity.headers().cacheControl();
         // 添加JWT filter
         httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         //添加自定义未授权和未登录结果返回
@@ -112,6 +120,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     throw new UsernameNotFoundException("该账户已冻结");
                 }
                 List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
+//                if(Objects.equals(admin.getUsername(), SysConstant.UMS_ADMIN)) {
+//                    permissionList = umsPermissionService.list();
+//                }else{
+//                    permissionList = adminService.getPermissionList(admin.getId());
+//                }
                 return new AdminUserDetails(admin,permissionList);
             }
             throw new UsernameNotFoundException("用户名不存在！");

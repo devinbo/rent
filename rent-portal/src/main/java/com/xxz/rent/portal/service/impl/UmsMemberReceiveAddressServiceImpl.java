@@ -22,11 +22,14 @@ public class UmsMemberReceiveAddressServiceImpl implements UmsMemberReceiveAddre
     private UmsMemberService memberService;
     @Autowired
     private UmsMemberReceiveAddressMapper addressMapper;
+
     @Override
     public int add(UmsMemberReceiveAddress address) {
         UmsMember currentMember = memberService.getCurrentMember();
         address.setMemberId(currentMember.getId());
-        return addressMapper.insert(address);
+        int count = addressMapper.insert(address);
+        updateAddressStatus(address, currentMember.getId());
+        return count;
     }
 
     @Override
@@ -43,7 +46,21 @@ public class UmsMemberReceiveAddressServiceImpl implements UmsMemberReceiveAddre
         UmsMember currentMember = memberService.getCurrentMember();
         UmsMemberReceiveAddressExample example = new UmsMemberReceiveAddressExample();
         example.createCriteria().andMemberIdEqualTo(currentMember.getId()).andIdEqualTo(id);
-        return addressMapper.updateByExampleSelective(address,example);
+        int count = addressMapper.updateByExampleSelective(address,example);
+        updateAddressStatus(address, currentMember.getId());
+        return count;
+    }
+
+    private void updateAddressStatus(UmsMemberReceiveAddress address, Long memberId) {
+        if (1 == address.getDefaultStatus()) {
+            //只能设置一个默认
+            UmsMemberReceiveAddressExample example = new UmsMemberReceiveAddressExample();
+            example.createCriteria().andIdNotEqualTo(address.getId())
+                    .andMemberIdEqualTo(memberId);
+            UmsMemberReceiveAddress receiveAddress = new UmsMemberReceiveAddress();
+            receiveAddress.setDefaultStatus(0);
+            addressMapper.updateByExampleSelective(receiveAddress, example);
+        }
     }
 
     @Override

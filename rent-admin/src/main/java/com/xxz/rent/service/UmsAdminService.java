@@ -1,5 +1,6 @@
 package com.xxz.rent.service;
 
+import com.xxz.rent.dto.PageParam;
 import com.xxz.rent.dto.UmsAdminParam;
 import com.xxz.rent.model.UmsAdmin;
 import com.xxz.rent.model.UmsPermission;
@@ -12,6 +13,7 @@ import java.util.List;
  * 后台管理员Service
  * Created by macro on 2018/4/26.
  */
+@Transactional(rollbackFor = Exception.class)
 public interface UmsAdminService {
     /**
      * 根据用户名获取后台管理员
@@ -31,6 +33,7 @@ public interface UmsAdminService {
      */
     String login(String username,String password);
 
+    public UmsAdmin getCurrLoginInfo();
     /**
      * 刷新token的功能
      * @param oldToken 旧的token
@@ -45,7 +48,7 @@ public interface UmsAdminService {
     /**
      * 根据用户名或昵称分页查询用户
      */
-    List<UmsAdmin> list(String name, Integer pageSize, Integer pageNum);
+    List<UmsAdmin> list(String name, PageParam pageParam);
 
     /**
      * 修改指定用户信息
@@ -71,7 +74,6 @@ public interface UmsAdminService {
     /**
      * 修改用户的+-权限
      */
-    @Transactional
     int updatePermission(Long adminId, List<Long> permissionIds);
 
     /**
@@ -116,4 +118,5 @@ public interface UmsAdminService {
      * @date 2019-06-10 17:40
      */
     List<UmsPermission> getUmsPermissionByRedis(Long id);
+
 }

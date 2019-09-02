@@ -1,9 +1,7 @@
 package com.xxz.rent.search.domain;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,32 +12,29 @@ import java.util.List;
  * Created by macro on 2018/6/19.
  */
 @Document(indexName = "pms", type = "product",shards = 1,replicas = 0)
+@Mapping(mappingPath = "mapping.json")
+@Setting(settingPath = "setting.json")
 public class EsProduct implements Serializable {
     private static final long serialVersionUID = -1L;
     @Id
     private Long id;
     @Field(type = FieldType.Keyword)
     private String productSn;
-    private Long brandId;
-    @Field(type = FieldType.Keyword)
-    private String brandName;
     private Long productCategoryId;
     @Field(type = FieldType.Keyword)
     private String productCategoryName;
     private String pic;
-    @Field(analyzer = "ik_max_word",type = FieldType.Text)
+    @Field(analyzer = "ik_max_word", searchAnalyzer = "pinyin", type = FieldType.Text)
     private String name;
-    @Field(analyzer = "ik_max_word",type = FieldType.Text)
+    @Field(analyzer = "ik_max_word", searchAnalyzer = "pinyin",type = FieldType.Text)
     private String subTitle;
-    @Field(analyzer = "ik_max_word",type = FieldType.Text)
+    @Field(analyzer = "ik_max_word", searchAnalyzer = "pinyin",type = FieldType.Text)
     private String keywords;
     private BigDecimal price;
     private Integer sale;
     private Integer newStatus;
     private Integer recommandStatus;
-    private Integer stock;
     private Integer promotionType;
-    private Integer sort;
     @Field(type =FieldType.Nested)
     private List<EsProductAttributeValue> attrValueList;
 
@@ -57,22 +52,6 @@ public class EsProduct implements Serializable {
 
     public void setProductSn(String productSn) {
         this.productSn = productSn;
-    }
-
-    public Long getBrandId() {
-        return brandId;
-    }
-
-    public void setBrandId(Long brandId) {
-        this.brandId = brandId;
-    }
-
-    public String getBrandName() {
-        return brandName;
-    }
-
-    public void setBrandName(String brandName) {
-        this.brandName = brandName;
     }
 
     public Long getProductCategoryId() {
@@ -147,28 +126,12 @@ public class EsProduct implements Serializable {
         this.recommandStatus = recommandStatus;
     }
 
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
     public Integer getPromotionType() {
         return promotionType;
     }
 
     public void setPromotionType(Integer promotionType) {
         this.promotionType = promotionType;
-    }
-
-    public Integer getSort() {
-        return sort;
-    }
-
-    public void setSort(Integer sort) {
-        this.sort = sort;
     }
 
     public List<EsProductAttributeValue> getAttrValueList() {

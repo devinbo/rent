@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.SmsMessageDao">
+
+    <select id="getUnReadMessageCount" resultType="java.lang.Long">
+        <if test="memberId != null and memberId !=''">
+            select count(*) from sms_message
+            where id not in (select id from sms_message_member_read_relation where member_id = #{memberId})
+        </if>
+        <if test="memberId == null or memberId == ''">
+            select count(*) from sms_message
+        </if>
+    </select>
+</mapper>

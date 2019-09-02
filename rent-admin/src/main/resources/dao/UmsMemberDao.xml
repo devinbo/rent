@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.dao.UmsMemberDao">
+
+    <resultMap id="umsMemberResultMap" type="com.xxz.rent.dto.UmsMemberResult" extends="com.xxz.rent.mapper.UmsMemberMapper.BaseResultMap">
+<!--        <collection property="umsMemberReceiveAddress" javaType="com.xxz.rent.model.UmsMemberReceiveAddress"-->
+<!--                     column="id" select="getReceiveAddressByMemberId" />-->
+        <association property="umsMemberKinsfolk" javaType="com.xxz.rent.model.UmsMemberKinsfolk"
+                     column="id" select="getUmsMemberKinsfolkByMemberId" />
+        <association property="umsMemberRealinform" javaType="com.xxz.rent.model.UmsMemberRealinform"
+                     column="id" select="getUmsMemberRealinformByMemberId" />
+        <association property="umsMemberLink" javaType="com.xxz.rent.model.UmsMemberLink"
+                     column="id" select="getUmsMemberLinkByMemberId" />
+        <association property="umsMemberAuthRelation" javaType="com.xxz.rent.model.UmsMemberAuthRelation"
+                     column="id" select="getUmsMemberAuthRelationByMemberId" />
+    </resultMap>
+
+    <select id="getReceiveAddressByMemberId" resultType="com.xxz.rent.model.UmsMemberReceiveAddress">
+        select * from ums_member_receive_address where member_id = #{id}
+    </select>
+
+    <select id="getUmsMemberKinsfolkByMemberId" resultType="com.xxz.rent.model.UmsMemberKinsfolk">
+        select * from ums_member_kinsfolk where member_id = #{id}
+    </select>
+
+    <select id="getUmsMemberLinkByMemberId" resultType="com.xxz.rent.model.UmsMemberLink">
+        select * from ums_member_link where member_id = #{id}
+    </select>
+
+    <select id="getUmsMemberRealinformByMemberId" resultType="com.xxz.rent.model.UmsMemberRealinform">
+        select * from ums_member_realinform where member_id = #{id}
+    </select>
+
+    <select id="getUmsMemberAuthRelationByMemberId" resultType="com.xxz.rent.model.UmsMemberAuthRelation">
+        select * from ums_member_auth_relation where member_id = #{id}
+    </select>
+
+    <!--        <association property="umsMemberAuthRelation" resultMap="com.xxz.rent.mapper.UmsMemberAuthRelationMapper.BaseResultMap" columnPrefix="auth_"/>-->
+    <!--        <association property="umsMemberKinsfolk" resultMap="com.xxz.rent.mapper.UmsMemberKinsfolkMapper.BaseResultMap" columnPrefix="kins_"/>-->
+    <!--        <association property="umsMemberLink" resultMap="com.xxz.rent.mapper.UmsMemberLinkMapper.BaseResultMap" columnPrefix="link_"/>-->
+
+<!--    <select id="getMemberDetail" resultMap="umsMemberResultMap">-->
+<!--        select u.*,-->
+<!--        rec_.id rec_id, rec_.member_id rec_member_id, rec_.name rec_name_id,rec_.phone_number rec_phone_number, rec_.default_status rec_default_status, rec_.post_code rec_post_code,rec_.province rec_province, rec_.city rec_city, rec_.region rec_region, rec_.detail_address rec_detail_address,-->
+<!--        kins_.id kins_id, kins_.name1 kins_name1, kins_.sex1 kins_sex1, kins_.phone1 kins_phone1, kins_.relation1 kins_relation1, kins_.name2 kins_name2, kins_.sex2 kins_sex2, kins_.phone2 kins_phone2, kins_.relation2 kins_relation2,-->
+<!--        auth_.member_id auth_member_id, auth_.id auth_id, auth_.member_id auth_member_id, auth_.identity_status auth_identity_status, auth_.baseinfo_status auth_baseinfo_status, auth_.kinsfolk_status auth_kinsfolk_status, auth_.link_status auth_link_status, auth_.mobile_status auth_mobile_status, auth_.taobao_status auth_taobao_status, auth_.study_status atuh_study_status,-->
+<!--        link_.id link_id, link_.name1 link_name1, link_.sex1 link_sex1, link_.phone1 link_phone1, link_.relation1 link_relation1, link_.name2 link_name2, link_.sex2 link_sex2, link_.phone2 link_phone2, link_.relation2 link_relation2, link_.member_id link_member_id-->
+<!--        from ums_member u-->
+<!--        left join ums_member_receive_address rec_ on u.id = rec_.member_id-->
+<!--        left join ums_member_kinsfolk kins_ on u.id = kins_.member_id-->
+<!--        left join ums_member_auth_relation auth_ on u.id = auth_.member_id-->
+<!--        left join ums_member_link link_ on u.id = link_.member_id-->
+<!--        where u.id = #{id}-->
+<!--    </select>-->
+
+    <select id="getMemberDetail" resultMap="umsMemberResultMap">
+        select u.*
+        from ums_member u
+        where u.id = #{id}
+    </select>
+
+    <select id="getMemberByKeyword" resultType="com.xxz.rent.model.UmsMember">
+        select id, name, phone from ums_member
+        <where>
+            <if test="keyword != null and keyword != ''">
+                (name like concat('%', #{keyword}, '%') or phone like concat('%', #{keyword}, '%'))
+            </if>
+        </where>
+    </select>
+</mapper>

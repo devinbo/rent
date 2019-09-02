@@ -296,66 +296,6 @@ public class SmsCouponExample {
             return (Criteria) this;
         }
 
-        public Criteria andPlatformIsNull() {
-            addCriterion("platform is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformIsNotNull() {
-            addCriterion("platform is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformEqualTo(Integer value) {
-            addCriterion("platform =", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformNotEqualTo(Integer value) {
-            addCriterion("platform <>", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformGreaterThan(Integer value) {
-            addCriterion("platform >", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformGreaterThanOrEqualTo(Integer value) {
-            addCriterion("platform >=", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformLessThan(Integer value) {
-            addCriterion("platform <", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformLessThanOrEqualTo(Integer value) {
-            addCriterion("platform <=", value, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformIn(List<Integer> values) {
-            addCriterion("platform in", values, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformNotIn(List<Integer> values) {
-            addCriterion("platform not in", values, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformBetween(Integer value1, Integer value2) {
-            addCriterion("platform between", value1, value2, "platform");
-            return (Criteria) this;
-        }
-
-        public Criteria andPlatformNotBetween(Integer value1, Integer value2) {
-            addCriterion("platform not between", value1, value2, "platform");
-            return (Criteria) this;
-        }
-
         public Criteria andCountIsNull() {
             addCriterion("count is null");
             return (Criteria) this;
@@ -1213,6 +1153,66 @@ public class SmsCouponExample {
 
         public Criteria andMemberLevelNotBetween(Integer value1, Integer value2) {
             addCriterion("member_level not between", value1, value2, "memberLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateIsNull() {
+            addCriterion("cate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateIsNotNull() {
+            addCriterion("cate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateEqualTo(Integer value) {
+            addCriterion("cate =", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateNotEqualTo(Integer value) {
+            addCriterion("cate <>", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateGreaterThan(Integer value) {
+            addCriterion("cate >", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cate >=", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateLessThan(Integer value) {
+            addCriterion("cate <", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateLessThanOrEqualTo(Integer value) {
+            addCriterion("cate <=", value, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateIn(List<Integer> values) {
+            addCriterion("cate in", values, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateNotIn(List<Integer> values) {
+            addCriterion("cate not in", values, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateBetween(Integer value1, Integer value2) {
+            addCriterion("cate between", value1, value2, "cate");
+            return (Criteria) this;
+        }
+
+        public Criteria andCateNotBetween(Integer value1, Integer value2) {
+            addCriterion("cate not between", value1, value2, "cate");
             return (Criteria) this;
         }
     }

@@ -2,6 +2,7 @@ package com.xxz.rent.service;
 
 import com.xxz.rent.dto.PmsProductCategoryParam;
 import com.xxz.rent.dto.PmsProductCategoryWithChildrenItem;
+import com.xxz.rent.model.PmsProduct;
 import com.xxz.rent.model.PmsProductCategory;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,7 +10,8 @@ import java.util.List;
 
 /**
  * 产品分类Service
- * Created by macro on 2018/4/26.
+ *
+ * @author xxz
  */
 public interface PmsProductCategoryService {
     @Transactional
@@ -29,4 +31,6 @@ public interface PmsProductCategoryService {
     int updateShowStatus(List<Long> ids, Integer showStatus);
 
     List<PmsProductCategoryWithChildrenItem> listWithChildren();
+
+
 }

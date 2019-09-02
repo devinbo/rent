@@ -27,11 +27,21 @@ public interface UmsPermissionService {
 
     /**
      * 以层级结构返回所有权限
+     * @param name
      */
-    List<UmsPermissionNode> treeList();
+    List<UmsPermissionNode> treeList(String name);
 
     /**
      * 获取所有权限
      */
     List<UmsPermission> list();
+
+    /**  功能描述 <br>
+     * <删除指定权限及其子权限>
+     *
+     * @param id
+     * @return int
+     * @date 2019-06-11 18:22
+     */
+    int deletePerm(Long id);
 }

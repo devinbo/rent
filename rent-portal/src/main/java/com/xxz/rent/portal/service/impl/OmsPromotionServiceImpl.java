@@ -47,10 +47,9 @@ public class OmsPromotionServiceImpl implements OmsPromotionService {
                     //商品原价-促销价
                     PmsSkuStock skuStock = getOriginalPrice(promotionProduct, item.getProductSkuId());
                     BigDecimal originalPrice = skuStock.getPrice();
-                    cartPromotionItem.setReduceAmount(originalPrice.subtract(skuStock.getPromotionPrice()));
-                    cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
+//                    cartPromotionItem.setReduceAmount(originalPrice.subtract(skuStock.getPromotionPrice()));
+//                    cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
                     cartPromotionItem.setIntegration(promotionProduct.getGiftPoint());
-                    cartPromotionItem.setGrowth(promotionProduct.getGiftGrowth());
                     cartPromotionItemList.add(cartPromotionItem);
                 }
             } else if (promotionType == 3) {
@@ -67,10 +66,9 @@ public class OmsPromotionServiceImpl implements OmsPromotionService {
                         PmsSkuStock skuStock = getOriginalPrice(promotionProduct,item.getProductSkuId());
                         BigDecimal originalPrice = skuStock.getPrice();
                         BigDecimal reduceAmount = originalPrice.subtract(ladder.getDiscount().multiply(originalPrice));
-                        cartPromotionItem.setReduceAmount(reduceAmount);
-                        cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
+//                        cartPromotionItem.setReduceAmount(reduceAmount);
+//                        cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
                         cartPromotionItem.setIntegration(promotionProduct.getGiftPoint());
-                        cartPromotionItem.setGrowth(promotionProduct.getGiftGrowth());
                         cartPromotionItemList.add(cartPromotionItem);
                     }
                 }else{
@@ -90,10 +88,9 @@ public class OmsPromotionServiceImpl implements OmsPromotionService {
                         PmsSkuStock skuStock= getOriginalPrice(promotionProduct, item.getProductSkuId());
                         BigDecimal originalPrice = skuStock.getPrice();
                         BigDecimal reduceAmount = originalPrice.divide(totalAmount,RoundingMode.HALF_EVEN).multiply(fullReduction.getReducePrice());
-                        cartPromotionItem.setReduceAmount(reduceAmount);
-                        cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
+//                        cartPromotionItem.setReduceAmount(reduceAmount);
+//                        cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
                         cartPromotionItem.setIntegration(promotionProduct.getGiftPoint());
-                        cartPromotionItem.setGrowth(promotionProduct.getGiftGrowth());
                         cartPromotionItemList.add(cartPromotionItem);
                     }
                 }else{
@@ -159,13 +156,12 @@ public class OmsPromotionServiceImpl implements OmsPromotionService {
             CartPromotionItem cartPromotionItem = new CartPromotionItem();
             BeanUtils.copyProperties(item,cartPromotionItem);
             cartPromotionItem.setPromotionMessage("无优惠");
-            cartPromotionItem.setReduceAmount(new BigDecimal(0));
+//            cartPromotionItem.setReduceAmount(new BigDecimal(0));
             PmsSkuStock skuStock = getOriginalPrice(promotionProduct,item.getProductSkuId());
             if(skuStock!=null){
-                cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
+//                cartPromotionItem.setRealStock(skuStock.getStock()-skuStock.getLockStock());
             }
             cartPromotionItem.setIntegration(promotionProduct.getGiftPoint());
-            cartPromotionItem.setGrowth(promotionProduct.getGiftGrowth());
             cartPromotionItemList.add(cartPromotionItem);
         }
     }

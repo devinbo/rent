@@ -37,4 +37,9 @@ public class MallSearchApplicationTests {
         System.out.println(mapping);
     }
 
+    //添加拼音分词mapping
+    @Test
+    public void testAddPcm() {
+//        elasticsearchTemplate.putMapping();
+    }
 }

@@ -1,5 +1,6 @@
 package com.xxz.rent.portal.util;
 
+import com.xxz.rent.portal.bo.exception.BusinessLogicException;
 import com.xxz.rent.portal.model.bo.MemberDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -106,6 +107,9 @@ public class JwtTokenUtil {
      */
     private Date getExpiredDateFromToken(String token) {
         Claims claims = getClaimsFromToken(token);
+        if(claims == null) {
+            throw new BusinessLogicException("无效Token");
+        }
         return claims.getExpiration();
     }
 

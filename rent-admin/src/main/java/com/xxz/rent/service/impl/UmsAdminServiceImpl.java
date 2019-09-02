@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.xxz.rent.bo.AdminUserDetails;
 import com.xxz.rent.dao.UmsAdminPermissionRelationDao;
 import com.xxz.rent.dao.UmsAdminRoleRelationDao;
+import com.xxz.rent.dto.PageParam;
 import com.xxz.rent.dto.UmsAdminParam;
 import com.xxz.rent.mapper.UmsAdminLoginLogMapper;
 import com.xxz.rent.mapper.UmsAdminMapper;
@@ -177,7 +178,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     /**
      * 获取当前登陆的用户信息
      */
-    private UmsAdmin getCurrLoginInfo() {
+    @Override
+    public UmsAdmin getCurrLoginInfo() {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         AdminUserDetails adminUserDetails = (AdminUserDetails) usernamePasswordAuthenticationToken.getPrincipal();
         return adminUserDetails.getUmsAdmin();
@@ -198,8 +200,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     }
 
     @Override
-    public List<UmsAdmin> list(String name, Integer pageSize, Integer pageNum) {
-        PageHelper.startPage(pageNum, pageSize);
+    public List<UmsAdmin> list(String name, PageParam pageParam) {
+        PageHelper.startPage(pageParam);
         UmsAdminExample example = new UmsAdminExample();
         UmsAdminExample.Criteria criteria = example.createCriteria();
         if (!StringUtils.isEmpty(name)) {
@@ -211,6 +213,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public int update(Long id, UmsAdmin admin) {
+        UmsAdmin umsAdminDb = adminMapper.selectByPrimaryKey(id);
+        Assert.isTrue(!Objects.equals(umsAdminDb.getUsername(), "admin"), "管理员账号信息不能修改");
         admin.setId(id);
         //密码已经加密处理，需要单独修改
         admin.setPassword(null);
@@ -219,6 +223,8 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Override
     public int delete(Long id) {
+        UmsAdmin umsAdminDb = adminMapper.selectByPrimaryKey(id);
+        Assert.isTrue(!Objects.equals(umsAdminDb.getUsername(), "admin"), "超级管理员权限不能删除");
         return adminMapper.deleteByPrimaryKey(id);
     }
 
@@ -296,7 +302,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         umsAdmin.setStatus(blockStatus);
         UmsAdminExample example = new UmsAdminExample();
         example.createCriteria().andIdIn(ids).andUsernameEqualTo("admin");
-        int count = adminMapper.countByExample(example);
+        long count = adminMapper.countByExample(example);
         Assert.isTrue(count == 0, "管理员账号不能操作");
         example.clear();
         example.createCriteria().andIdIn(ids);

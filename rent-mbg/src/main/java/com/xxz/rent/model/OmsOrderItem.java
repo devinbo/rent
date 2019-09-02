@@ -3,6 +3,7 @@ package com.xxz.rent.model;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class OmsOrderItem implements Serializable {
     private Long id;
@@ -13,21 +14,23 @@ public class OmsOrderItem implements Serializable {
     @ApiModelProperty(value = "订单编号")
     private String orderSn;
 
+    @ApiModelProperty(value = "商品ID")
     private Long productId;
 
+    @ApiModelProperty(value = "商品图片")
     private String productPic;
 
+    @ApiModelProperty(value = "商品名称")
     private String productName;
 
-    private String productBrand;
-
+    @ApiModelProperty(value = "商品货号")
     private String productSn;
 
-    @ApiModelProperty(value = "销售价格")
+    @ApiModelProperty(value = "签约价格")
     private BigDecimal productPrice;
 
-    @ApiModelProperty(value = "购买数量")
-    private Integer productQuantity;
+    @ApiModelProperty(value = "商品成本价格")
+    private BigDecimal productCostPrice;
 
     @ApiModelProperty(value = "商品sku编号")
     private Long productSkuId;
@@ -45,27 +48,38 @@ public class OmsOrderItem implements Serializable {
 
     private String sp3;
 
-    @ApiModelProperty(value = "商品促销名称")
-    private String promotionName;
+    @ApiModelProperty(value = "商品每期价格")
+    private BigDecimal productEachPrice;
 
-    @ApiModelProperty(value = "商品促销分解金额")
-    private BigDecimal promotionAmount;
+    @ApiModelProperty(value = "期数")
+    private Integer productPeriods;
 
-    @ApiModelProperty(value = "优惠券优惠分解金额")
-    private BigDecimal couponAmount;
-
-    @ApiModelProperty(value = "积分优惠分解金额")
-    private BigDecimal integrationAmount;
+    @ApiModelProperty(value = "期数单位: 0->日；1->周；2->月；3->年")
+    private Integer productUnit;
 
     @ApiModelProperty(value = "该商品经过优惠后的分解金额")
     private BigDecimal realAmount;
 
+    @ApiModelProperty(value = "订单完成后赠予积分数")
     private Integer giftIntegration;
-
-    private Integer giftGrowth;
 
     @ApiModelProperty(value = "商品销售属性:[{'key':'颜色','value':'颜色'},{'key':'容量','value':'4G'}]")
     private String productAttr;
+
+    @ApiModelProperty(value = "商品参与的促销类型：0->无优惠；1->首期租金减免；2->免押金")
+    private Integer promotionType;
+
+    @ApiModelProperty(value = "促销开始时间")
+    private Date promotionStartTime;
+
+    @ApiModelProperty(value = "促销结束时间")
+    private Date promotionEndTime;
+
+    @ApiModelProperty(value = "下单时间")
+    private Date createTime;
+
+    @ApiModelProperty(value = "首期减免金额")
+    private BigDecimal firstEachPriceSub;
 
     private static final long serialVersionUID = 1L;
 
@@ -117,14 +131,6 @@ public class OmsOrderItem implements Serializable {
         this.productName = productName;
     }
 
-    public String getProductBrand() {
-        return productBrand;
-    }
-
-    public void setProductBrand(String productBrand) {
-        this.productBrand = productBrand;
-    }
-
     public String getProductSn() {
         return productSn;
     }
@@ -141,12 +147,12 @@ public class OmsOrderItem implements Serializable {
         this.productPrice = productPrice;
     }
 
-    public Integer getProductQuantity() {
-        return productQuantity;
+    public BigDecimal getProductCostPrice() {
+        return productCostPrice;
     }
 
-    public void setProductQuantity(Integer productQuantity) {
-        this.productQuantity = productQuantity;
+    public void setProductCostPrice(BigDecimal productCostPrice) {
+        this.productCostPrice = productCostPrice;
     }
 
     public Long getProductSkuId() {
@@ -197,36 +203,28 @@ public class OmsOrderItem implements Serializable {
         this.sp3 = sp3;
     }
 
-    public String getPromotionName() {
-        return promotionName;
+    public BigDecimal getProductEachPrice() {
+        return productEachPrice;
     }
 
-    public void setPromotionName(String promotionName) {
-        this.promotionName = promotionName;
+    public void setProductEachPrice(BigDecimal productEachPrice) {
+        this.productEachPrice = productEachPrice;
     }
 
-    public BigDecimal getPromotionAmount() {
-        return promotionAmount;
+    public Integer getProductPeriods() {
+        return productPeriods;
     }
 
-    public void setPromotionAmount(BigDecimal promotionAmount) {
-        this.promotionAmount = promotionAmount;
+    public void setProductPeriods(Integer productPeriods) {
+        this.productPeriods = productPeriods;
     }
 
-    public BigDecimal getCouponAmount() {
-        return couponAmount;
+    public Integer getProductUnit() {
+        return productUnit;
     }
 
-    public void setCouponAmount(BigDecimal couponAmount) {
-        this.couponAmount = couponAmount;
-    }
-
-    public BigDecimal getIntegrationAmount() {
-        return integrationAmount;
-    }
-
-    public void setIntegrationAmount(BigDecimal integrationAmount) {
-        this.integrationAmount = integrationAmount;
+    public void setProductUnit(Integer productUnit) {
+        this.productUnit = productUnit;
     }
 
     public BigDecimal getRealAmount() {
@@ -245,20 +243,52 @@ public class OmsOrderItem implements Serializable {
         this.giftIntegration = giftIntegration;
     }
 
-    public Integer getGiftGrowth() {
-        return giftGrowth;
-    }
-
-    public void setGiftGrowth(Integer giftGrowth) {
-        this.giftGrowth = giftGrowth;
-    }
-
     public String getProductAttr() {
         return productAttr;
     }
 
     public void setProductAttr(String productAttr) {
         this.productAttr = productAttr;
+    }
+
+    public Integer getPromotionType() {
+        return promotionType;
+    }
+
+    public void setPromotionType(Integer promotionType) {
+        this.promotionType = promotionType;
+    }
+
+    public Date getPromotionStartTime() {
+        return promotionStartTime;
+    }
+
+    public void setPromotionStartTime(Date promotionStartTime) {
+        this.promotionStartTime = promotionStartTime;
+    }
+
+    public Date getPromotionEndTime() {
+        return promotionEndTime;
+    }
+
+    public void setPromotionEndTime(Date promotionEndTime) {
+        this.promotionEndTime = promotionEndTime;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public BigDecimal getFirstEachPriceSub() {
+        return firstEachPriceSub;
+    }
+
+    public void setFirstEachPriceSub(BigDecimal firstEachPriceSub) {
+        this.firstEachPriceSub = firstEachPriceSub;
     }
 
     @Override
@@ -273,24 +303,26 @@ public class OmsOrderItem implements Serializable {
         sb.append(", productId=").append(productId);
         sb.append(", productPic=").append(productPic);
         sb.append(", productName=").append(productName);
-        sb.append(", productBrand=").append(productBrand);
         sb.append(", productSn=").append(productSn);
         sb.append(", productPrice=").append(productPrice);
-        sb.append(", productQuantity=").append(productQuantity);
+        sb.append(", productCostPrice=").append(productCostPrice);
         sb.append(", productSkuId=").append(productSkuId);
         sb.append(", productSkuCode=").append(productSkuCode);
         sb.append(", productCategoryId=").append(productCategoryId);
         sb.append(", sp1=").append(sp1);
         sb.append(", sp2=").append(sp2);
         sb.append(", sp3=").append(sp3);
-        sb.append(", promotionName=").append(promotionName);
-        sb.append(", promotionAmount=").append(promotionAmount);
-        sb.append(", couponAmount=").append(couponAmount);
-        sb.append(", integrationAmount=").append(integrationAmount);
+        sb.append(", productEachPrice=").append(productEachPrice);
+        sb.append(", productPeriods=").append(productPeriods);
+        sb.append(", productUnit=").append(productUnit);
         sb.append(", realAmount=").append(realAmount);
         sb.append(", giftIntegration=").append(giftIntegration);
-        sb.append(", giftGrowth=").append(giftGrowth);
         sb.append(", productAttr=").append(productAttr);
+        sb.append(", promotionType=").append(promotionType);
+        sb.append(", promotionStartTime=").append(promotionStartTime);
+        sb.append(", promotionEndTime=").append(promotionEndTime);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", firstEachPriceSub=").append(firstEachPriceSub);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

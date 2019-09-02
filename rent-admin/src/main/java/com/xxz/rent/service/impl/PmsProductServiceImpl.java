@@ -2,6 +2,7 @@ package com.xxz.rent.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.xxz.rent.dao.*;
+import com.xxz.rent.dto.PageParam;
 import com.xxz.rent.dto.PmsProductParam;
 import com.xxz.rent.dto.PmsProductQueryParam;
 import com.xxz.rent.dto.PmsProductResult;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -20,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 商品管理Service实现类
@@ -62,6 +65,7 @@ public class PmsProductServiceImpl implements PmsProductService {
     private PmsProductDao productDao;
     @Autowired
     private PmsProductVertifyRecordDao productVertifyRecordDao;
+    private PmsProductExample example;
 
     @Override
     public int create(PmsProductParam productParam) {
@@ -72,7 +76,7 @@ public class PmsProductServiceImpl implements PmsProductService {
         productMapper.insertSelective(product);
         //根据促销类型设置价格：、阶梯价格、满减价格
         Long productId = product.getId();
-        //会员价格
+//        //会员价格
         relateAndInsertList(memberPriceDao, productParam.getMemberPriceList(), productId);
         //阶梯价格
         relateAndInsertList(productLadderDao, productParam.getProductLadderList(), productId);
@@ -93,7 +97,9 @@ public class PmsProductServiceImpl implements PmsProductService {
     }
 
     private void handleSkuStockCode(List<PmsSkuStock> skuStockList, Long productId) {
-        if(CollectionUtils.isEmpty(skuStockList))return;
+        if(CollectionUtils.isEmpty(skuStockList)) {
+            return;
+        }
         for(int i=0;i<skuStockList.size();i++){
             PmsSkuStock skuStock = skuStockList.get(i);
             if(StringUtils.isEmpty(skuStock.getSkuCode())){
@@ -171,28 +177,22 @@ public class PmsProductServiceImpl implements PmsProductService {
         if (productQueryParam.getPublishStatus() != null) {
             criteria.andPublishStatusEqualTo(productQueryParam.getPublishStatus());
         }
-        if (productQueryParam.getVerifyStatus() != null) {
-            criteria.andVerifyStatusEqualTo(productQueryParam.getVerifyStatus());
-        }
         if (!StringUtils.isEmpty(productQueryParam.getKeyword())) {
             criteria.andNameLike("%" + productQueryParam.getKeyword() + "%");
         }
         if (!StringUtils.isEmpty(productQueryParam.getProductSn())) {
             criteria.andProductSnEqualTo(productQueryParam.getProductSn());
         }
-        if (productQueryParam.getBrandId() != null) {
-            criteria.andBrandIdEqualTo(productQueryParam.getBrandId());
-        }
         if (productQueryParam.getProductCategoryId() != null) {
             criteria.andProductCategoryIdEqualTo(productQueryParam.getProductCategoryId());
         }
+        productExample.setOrderByClause("sort desc");
         return productMapper.selectByExample(productExample);
     }
 
     @Override
     public int updateVerifyStatus(List<Long> ids, Integer verifyStatus, String detail) {
         PmsProduct product = new PmsProduct();
-        product.setVerifyStatus(verifyStatus);
         PmsProductExample example = new PmsProductExample();
         example.createCriteria().andIdIn(ids);
         List<PmsProductVertifyRecord> list = new ArrayList<>();
@@ -257,6 +257,33 @@ public class PmsProductServiceImpl implements PmsProductService {
             productExample.or().andDeleteStatusEqualTo(0).andProductSnLike("%" + keyword + "%");
         }
         return productMapper.selectByExample(productExample);
+    }
+
+    @Override
+    public List<PmsProduct> getProductByCateId(Long cateId, PageParam pageParam) {
+        PageHelper.startPage(pageParam);
+        return productDao.getProductByCateId(cateId);
+    }
+
+    @Override
+    public int updateCate(Long id, PmsProduct pmsProduct) {
+        System.out.println(pmsProduct.getProductCategoryId());
+        Assert.isTrue(!Objects.isNull(pmsProduct.getProductCategoryId()), "分类ID不能为空");
+        pmsProduct.setId(id);
+        return productMapper.updateByPrimaryKeySelective(pmsProduct);
+    }
+
+    @Override
+    public int deleteCate(Long id) {
+        return productDao.deleteCate(id);
+    }
+
+    @Override
+    public List<PmsProduct> getUsedList(PageParam pageParam) {
+        PageHelper.startPage(pageParam);
+        PmsProductExample example = new PmsProductExample();
+        example.createCriteria().andDeleteStatusEqualTo(0).andNewStatusEqualTo(0);
+        return productMapper.selectByExample(example);
     }
 
     /**
@@ -332,7 +359,9 @@ public class PmsProductServiceImpl implements PmsProductService {
      */
     private void relateAndInsertList(Object dao, List dataList, Long productId) {
         try {
-            if (CollectionUtils.isEmpty(dataList)) return;
+            if (CollectionUtils.isEmpty(dataList)) {
+                return;
+            }
             for (Object item : dataList) {
                 Method setId = item.getClass().getMethod("setId", Long.class);
                 setId.invoke(item, (Long) null);
@@ -346,5 +375,6 @@ public class PmsProductServiceImpl implements PmsProductService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
 
 }

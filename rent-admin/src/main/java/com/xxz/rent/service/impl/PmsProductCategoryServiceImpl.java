@@ -134,6 +134,7 @@ public class PmsProductCategoryServiceImpl implements PmsProductCategoryService 
         return productCategoryDao.listWithChildren();
     }
 
+
     /**
      * 根据分类的parentId设置分类的level
      */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="module_mall" default="compile.module.mall">
+<project name="module_mall" default="compile.module.rent">
   <dirname property="module.mall.basedir" file="${ant.file.module_mall}"/>
   
   <property name="module.jdk.home.mall" value="${project.jdk.home}"/>
@@ -8,8 +8,8 @@
   
   <property name="compiler.args.mall" value="-encoding UTF-8 -source 8 -target 1.8 ${compiler.args}"/>
   
-  <property name="mall.output.dir" value="${module.mall.basedir}/target/classes"/>
-  <property name="mall.testoutput.dir" value="${module.mall.basedir}/target/test-classes"/>
+  <property name="mall.output.dir" value="${module.rent.basedir}/target/classes"/>
+  <property name="mall.testoutput.dir" value="${module.rent.basedir}/target/test-classes"/>
   
   <path id="mall.module.bootclasspath">
     <!-- Paths to be included in compilation bootclasspath -->
@@ -312,13 +312,13 @@
   </patternset>
   
   
-  <target name="compile.module.mall" depends="compile.module.mall.production,compile.module.mall.tests" description="Compile module mall"/>
+  <target name="compile.module.rent" depends="compile.module.mall.production,compile.module.mall.tests" description="Compile module mall"/>
   
   <target name="compile.module.mall.production" depends="register.custom.compilers" description="Compile module mall; production classes"/>
   
   <target name="compile.module.mall.tests" depends="register.custom.compilers,compile.module.mall.production" description="compile module mall; test classes" unless="skip.tests"/>
   
-  <target name="clean.module.mall" description="cleanup module">
+  <target name="clean.module.rent" description="cleanup module">
     <delete dir="${mall.output.dir}"/>
     <delete dir="${mall.testoutput.dir}"/>
   </target>

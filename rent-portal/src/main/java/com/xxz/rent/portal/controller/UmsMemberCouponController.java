@@ -4,6 +4,7 @@ import com.xxz.rent.common.api.CommonResult;
 import com.xxz.rent.model.SmsCouponHistory;
 import com.xxz.rent.portal.model.dto.CartPromotionItem;
 import com.xxz.rent.portal.model.dto.SmsCouponHistoryDetail;
+import com.xxz.rent.portal.model.dto.SmsCouponHistoryResult;
 import com.xxz.rent.portal.service.OmsCartItemService;
 import com.xxz.rent.portal.service.UmsMemberCouponService;
 import com.xxz.rent.portal.service.UmsMemberService;
@@ -18,7 +19,9 @@ import java.util.List;
 
 /**
  * 用户优惠券管理Controller
- * Created by macro on 2018/8/29.
+ *
+ * @author macro
+ * @date 2018/8/29
  */
 @Controller
 @Api(tags = "UmsMemberCouponController", description = "用户优惠券管理")
@@ -43,19 +46,21 @@ public class UmsMemberCouponController {
             allowableValues = "0,1,2", paramType = "query", dataType = "integer")
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<List<SmsCouponHistory>> list(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
-        List<SmsCouponHistory> couponHistoryList = memberCouponService.list(useStatus);
-        return CommonResult.success(couponHistoryList);
+    public CommonResult<List<SmsCouponHistoryResult>> list(@RequestParam(value = "useStatus", required = false) Integer useStatus) {
+        List<SmsCouponHistoryResult> couponHistoryResultList = memberCouponService.list(useStatus);
+        return CommonResult.success(couponHistoryResultList);
     }
 
-    @ApiOperation("获取登录会员购物车的相关优惠券")
-    @ApiImplicitParam(name = "type", value = "使用可用:0->不可用；1->可用",
-            defaultValue = "1", allowableValues = "0,1", paramType = "query", dataType = "integer")
-    @RequestMapping(value = "/list/cart/{type}", method = RequestMethod.GET)
-    @ResponseBody
-    public CommonResult<List<SmsCouponHistoryDetail>> listCart(@PathVariable Integer type) {
-        List<CartPromotionItem> cartPromotionItemList = cartItemService.listPromotion(memberService.getCurrentMember().getId());
-        List<SmsCouponHistoryDetail> couponHistoryList = memberCouponService.listCart(cartPromotionItemList, type);
-        return CommonResult.success(couponHistoryList);
-    }
+//    @ApiOperation("获取登录会员购物车的相关优惠券")
+//    @ApiImplicitParam(name = "type", value = "使用可用:0->不可用；1->可用",
+//            defaultValue = "1", allowableValues = "0,1", paramType = "query", dataType = "integer")
+//    @RequestMapping(value = "/list/cart/{type}", method = RequestMethod.GET)
+//    @ResponseBody
+//    public CommonResult<List<SmsCouponHistoryDetail>> listCart(@PathVariable Integer type) {
+//        List<CartPromotionItem> cartPromotionItemList = cartItemService.listPromotion(memberService.getCurrentMember().getId());
+//        List<SmsCouponHistoryDetail> couponHistoryList = memberCouponService.listCart(cartPromotionItemList, type);
+//        return CommonResult.success(couponHistoryList);
+//    }
+
+
 }

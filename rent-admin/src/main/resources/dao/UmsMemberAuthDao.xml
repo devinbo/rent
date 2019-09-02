@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.dao.UmsMemberAuthDao">
+
+    <select id="list" resultType="com.xxz.rent.dto.UmsMemberAuthResult">
+        select r.*, um.name memberName, um.phone memberPhone
+        from ums_member_auth_relation r
+        left join ums_member um on r.member_id = um.id
+        where r.identity_status = 1
+        and (r.baseinfo_status = 3 or r.kinsfolk_status = 3 or r.link_status = 3
+            or r.mobile_status = 3 or r.taobao_status = 3 or r.study_status = 3)
+        <if test="name != null and name != ''">
+            and (um.name like concat('%', #{name}, '%') or um.phone like concat('%', #{name}, '%'))
+        </if>
+    </select>
+</mapper>

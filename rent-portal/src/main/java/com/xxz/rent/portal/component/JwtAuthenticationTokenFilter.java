@@ -40,7 +40,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         String authHeader = request.getHeader(this.tokenHeader);
         if (authHeader != null && authHeader.startsWith(this.tokenHead)) {
-            String authToken = authHeader.substring(this.tokenHead.length());// The part after "Bearer "
+            // The part after "Bearer "
+            String authToken = authHeader.substring(this.tokenHead.length());
+            System.out.println(authToken);
             String telephone = jwtTokenUtil.getUserNameFromToken(authToken);
             LOGGER.info("checking telephone:{}", telephone);
             if (telephone != null && SecurityContextHolder.getContext().getAuthentication() == null) {

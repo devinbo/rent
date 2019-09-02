@@ -54,9 +54,7 @@ public class PmsBrandServiceImpl implements PmsBrandService {
         }
         //更新品牌时要更新商品中的品牌名称
         PmsProduct product = new PmsProduct();
-        product.setBrandName(pmsBrand.getName());
         PmsProductExample example = new PmsProductExample();
-        example.createCriteria().andBrandIdEqualTo(id);
         productMapper.updateByExampleSelective(product,example);
         return brandMapper.updateByPrimaryKeySelective(pmsBrand);
     }

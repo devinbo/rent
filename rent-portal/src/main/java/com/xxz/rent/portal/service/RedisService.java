@@ -47,4 +47,14 @@ public interface RedisService {
      * 设置对象
      */
     void setObj(String key, Object value, long expire);
+
+    /**
+     * 加入集合
+     */
+    void addList(String key, Object value);
+
+    /**
+     * 取出数据
+     */
+    void getList(String key, long len);
 }

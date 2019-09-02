@@ -1,8 +1,15 @@
 spring:
   profiles:
-    active: dev #默认为开发环境
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 150MB
+      max-request-size: 150MB
+
 
 mybatis:
+  configuration:
+    mapUnderscoreToCamelCase: true
   mapper-locations:
     - classpath:dao/*.xml
     - classpath*:com/**/mapper/*.xml
@@ -23,14 +30,33 @@ redis:
       authCode: "portal:authCode:"
       orderId: "portal:orderId:"
       memberTelephone: "portal:memberTelephone:"
+      waitPay: "portal:order:waitPay:"
+      otoWaitPay: "portal:order:otoWaitPay:"
     expire:
       authCode: 90 # 验证码超期时间
-      member: 604800 # redis用户有效时间
+      member: 604800 # redis用户有效时间(7天)
+
+# redisson 单节点模式
+redisson:
+  password: mmt123 # Redis服务器连接密码（默认为空
+  singleServerConfig:
+    address: localhost:6379
+    database: 0 # Redis数据库索引（默认为0）
+
+
 # 消息队列定义
 rabbitmq:
   queue:
     name:
       cancelOrder: cancelOrderQueue
+
+
+
+alicloud:
+  regionId: cn-hangzhou
+  prBasic: 91xiaoxiangzu
+  accessKeyId: LTAIdF00HsZdZi3k
+  accessKeySecret: NBb4yxDYb5El4vMyRkGxIlWv0crwvA
 
 
 logging:

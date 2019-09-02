@@ -55,7 +55,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UmsAdmin admin = umsAdminService.getUmsAdminByRedisWithUserName(username);
                 if(admin == null) {
-                    out(response, CommonResult.forbidden("登陆已失效！"));
+                    out(response, CommonResult.unauthorized("登陆已失效！"));
                     return;
                 }
                 List<UmsPermission> permissionList = umsAdminService.getUmsPermissionByRedis(admin.getId());
@@ -72,6 +72,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     }
 
     private void out(HttpServletResponse response, CommonResult result) {
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");
         try {

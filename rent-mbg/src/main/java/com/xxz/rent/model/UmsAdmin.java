@@ -32,6 +32,9 @@ public class UmsAdmin implements Serializable {
     @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
     private Integer status;
 
+    @ApiModelProperty(value = "真实姓名")
+    private String realName;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -114,6 +117,14 @@ public class UmsAdmin implements Serializable {
         this.status = status;
     }
 
+    public String getRealName() {
+        return realName;
+    }
+
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -130,6 +141,7 @@ public class UmsAdmin implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", loginTime=").append(loginTime);
         sb.append(", status=").append(status);
+        sb.append(", realName=").append(realName);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

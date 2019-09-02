@@ -1,58 +1,61 @@
 package com.xxz.rent.portal.controller;
 
+import com.github.pagehelper.page.PageParams;
+import com.xxz.rent.common.api.CommonPage;
 import com.xxz.rent.common.api.CommonResult;
+import com.xxz.rent.model.OmsOrderPayment;
 import com.xxz.rent.portal.model.dto.ConfirmOrderResult;
+import com.xxz.rent.portal.model.dto.OmsOrderResult;
 import com.xxz.rent.portal.model.dto.OrderParam;
 import com.xxz.rent.portal.service.OmsPortalOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 订单管理Controller
- * Created by macro on 2018/8/30.
+ *
+ * @author xxz
  */
-@Controller
+@RestController
 @Api(tags = "OmsPortalOrderController",description = "订单管理")
 @RequestMapping("/order")
 public class OmsPortalOrderController {
     @Autowired
     private OmsPortalOrderService portalOrderService;
-    @ApiOperation("根据购物车信息生成确认单信息")
-    @RequestMapping(value = "/generateConfirmOrder",method = RequestMethod.POST)
-    @ResponseBody
-    public CommonResult<ConfirmOrderResult> generateConfirmOrder(){
-        ConfirmOrderResult confirmOrderResult = portalOrderService.generateConfirmOrder();
-        return CommonResult.success(confirmOrderResult);
+
+    @ApiOperation("自营订单列表")
+    @GetMapping(value = "/list")
+    public CommonResult<CommonPage<OmsOrderResult>> list(@ApiParam(value = "状态；0->查询全部;1->进行中/签约中;2->已完成；3->已取消", allowableValues = "0,1,2,3")
+                                                 @RequestParam Integer status,
+                                             @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+                                             @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum){
+        List<OmsOrderResult> omsOrderResultList = portalOrderService.list(status, pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(omsOrderResultList));
     }
 
-    @ApiOperation("根据购物车信息生成订单")
-    @RequestMapping(value = "/generateOrder",method = RequestMethod.POST)
-    @ResponseBody
-    public Object generateOrder(@RequestBody OrderParam orderParam){
-        return portalOrderService.generateOrder(orderParam);
-    }
-    @ApiOperation("支付成功的回调")
-    @RequestMapping(value = "/paySuccess",method = RequestMethod.POST)
-    @ResponseBody
-    public Object paySuccess(@RequestParam Long orderId){
-        return portalOrderService.paySuccess(orderId);
+
+    @ApiOperation("查询订单")
+    @GetMapping("/{id}")
+    public CommonResult<OmsOrderResult> getOrderDetail(@PathVariable("id") Long id) {
+        OmsOrderResult orderResult = portalOrderService.getOrderDetail(id);
+        if(orderResult == null) {
+            return CommonResult.failed("订单ID无效或已被删");
+        }
+        return CommonResult.success(orderResult);
     }
 
-    @ApiOperation("自动取消超时订单")
-    @RequestMapping(value = "/cancelTimeOutOrder",method = RequestMethod.POST)
-    @ResponseBody
-    public Object cancelTimeOutOrder(){
-        return portalOrderService.cancelTimeOutOrder();
+    @ApiOperation(value = "查询订单的账单信息", notes = "排序方式按 当前待还 > 尚未开始 > 已还")
+    @GetMapping("/bills")
+    public CommonResult<List<OmsOrderPayment>> getOrderBills(@ApiParam(value = "订单ID", required = true) @RequestParam Long orderId) {
+        List<OmsOrderPayment> orderPaymentList = portalOrderService.getOrderBills(orderId);
+        return CommonResult.success(orderPaymentList);
     }
 
-    @ApiOperation("取消单个超时订单")
-    @RequestMapping(value = "/cancelOrder",method = RequestMethod.POST)
-    @ResponseBody
-    public CommonResult cancelOrder(Long orderId){
-        portalOrderService.sendDelayMessageCancelOrder(orderId);
-        return CommonResult.success(null);
-    }
+
 }

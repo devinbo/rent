@@ -815,66 +815,6 @@ public class PmsSkuStockExample {
             return (Criteria) this;
         }
 
-        public Criteria andPromotionPriceIsNull() {
-            addCriterion("promotion_price is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceIsNotNull() {
-            addCriterion("promotion_price is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceEqualTo(BigDecimal value) {
-            addCriterion("promotion_price =", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceNotEqualTo(BigDecimal value) {
-            addCriterion("promotion_price <>", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceGreaterThan(BigDecimal value) {
-            addCriterion("promotion_price >", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("promotion_price >=", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceLessThan(BigDecimal value) {
-            addCriterion("promotion_price <", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("promotion_price <=", value, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceIn(List<BigDecimal> values) {
-            addCriterion("promotion_price in", values, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceNotIn(List<BigDecimal> values) {
-            addCriterion("promotion_price not in", values, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("promotion_price between", value1, value2, "promotionPrice");
-            return (Criteria) this;
-        }
-
-        public Criteria andPromotionPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("promotion_price not between", value1, value2, "promotionPrice");
-            return (Criteria) this;
-        }
-
         public Criteria andLockStockIsNull() {
             addCriterion("lock_stock is null");
             return (Criteria) this;
@@ -932,6 +872,126 @@ public class PmsSkuStockExample {
 
         public Criteria andLockStockNotBetween(Integer value1, Integer value2) {
             addCriterion("lock_stock not between", value1, value2, "lockStock");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceIsNull() {
+            addCriterion("each_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceIsNotNull() {
+            addCriterion("each_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceEqualTo(BigDecimal value) {
+            addCriterion("each_price =", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceNotEqualTo(BigDecimal value) {
+            addCriterion("each_price <>", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceGreaterThan(BigDecimal value) {
+            addCriterion("each_price >", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("each_price >=", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceLessThan(BigDecimal value) {
+            addCriterion("each_price <", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("each_price <=", value, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceIn(List<BigDecimal> values) {
+            addCriterion("each_price in", values, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceNotIn(List<BigDecimal> values) {
+            addCriterion("each_price not in", values, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("each_price between", value1, value2, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andEachPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("each_price not between", value1, value2, "eachPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceIsNull() {
+            addCriterion("cost_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceIsNotNull() {
+            addCriterion("cost_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceEqualTo(BigDecimal value) {
+            addCriterion("cost_price =", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotEqualTo(BigDecimal value) {
+            addCriterion("cost_price <>", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceGreaterThan(BigDecimal value) {
+            addCriterion("cost_price >", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost_price >=", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceLessThan(BigDecimal value) {
+            addCriterion("cost_price <", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost_price <=", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceIn(List<BigDecimal> values) {
+            addCriterion("cost_price in", values, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotIn(List<BigDecimal> values) {
+            addCriterion("cost_price not in", values, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost_price between", value1, value2, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost_price not between", value1, value2, "costPrice");
             return (Criteria) this;
         }
     }

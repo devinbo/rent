@@ -7,15 +7,19 @@ import java.util.Date;
 public class SmsHomeAdvertise implements Serializable {
     private Long id;
 
+    @ApiModelProperty(value = "广告名称")
     private String name;
 
     @ApiModelProperty(value = "轮播位置：0->PC首页轮播；1->app首页轮播")
     private Integer type;
 
+    @ApiModelProperty(value = "广告图片")
     private String pic;
 
+    @ApiModelProperty(value = "广告开始时间")
     private Date startTime;
 
+    @ApiModelProperty(value = "广告截止时间")
     private Date endTime;
 
     @ApiModelProperty(value = "上下线状态：0->下线；1->上线")
@@ -35,6 +39,15 @@ public class SmsHomeAdvertise implements Serializable {
 
     @ApiModelProperty(value = "排序")
     private Integer sort;
+
+    @ApiModelProperty(value = "跳转类型 0->跳转产品；1->跳转专题； 2->跳转url")
+    private Integer linkType;
+
+    @ApiModelProperty(value = "产品ID")
+    private Long productId;
+
+    @ApiModelProperty(value = "专题ID")
+    private Long subjectId;
 
     private static final long serialVersionUID = 1L;
 
@@ -134,6 +147,30 @@ public class SmsHomeAdvertise implements Serializable {
         this.sort = sort;
     }
 
+    public Integer getLinkType() {
+        return linkType;
+    }
+
+    public void setLinkType(Integer linkType) {
+        this.linkType = linkType;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
+
+    public Long getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(Long subjectId) {
+        this.subjectId = subjectId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -152,6 +189,9 @@ public class SmsHomeAdvertise implements Serializable {
         sb.append(", url=").append(url);
         sb.append(", note=").append(note);
         sb.append(", sort=").append(sort);
+        sb.append(", linkType=").append(linkType);
+        sb.append(", productId=").append(productId);
+        sb.append(", subjectId=").append(subjectId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

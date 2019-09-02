@@ -6,20 +6,14 @@ import java.io.Serializable;
 public class OmsOrderSetting implements Serializable {
     private Long id;
 
-    @ApiModelProperty(value = "秒杀订单超时关闭时间(分)")
-    private Integer flashOrderOvertime;
-
     @ApiModelProperty(value = "正常订单超时时间(分)")
     private Integer normalOrderOvertime;
 
-    @ApiModelProperty(value = "发货后自动确认收货时间（天）")
-    private Integer confirmOvertime;
+    @ApiModelProperty(value = "每期租金赠送积分 （千分之）")
+    private Integer paymentIntegral;
 
-    @ApiModelProperty(value = "自动完成交易时间，不能申请售后（天）")
-    private Integer finishOvertime;
-
-    @ApiModelProperty(value = "订单完成后自动好评时间（天）")
-    private Integer commentOvertime;
+    @ApiModelProperty(value = "订单逾期费率（万分之）")
+    private Integer overdueRate;
 
     private static final long serialVersionUID = 1L;
 
@@ -31,14 +25,6 @@ public class OmsOrderSetting implements Serializable {
         this.id = id;
     }
 
-    public Integer getFlashOrderOvertime() {
-        return flashOrderOvertime;
-    }
-
-    public void setFlashOrderOvertime(Integer flashOrderOvertime) {
-        this.flashOrderOvertime = flashOrderOvertime;
-    }
-
     public Integer getNormalOrderOvertime() {
         return normalOrderOvertime;
     }
@@ -47,28 +33,20 @@ public class OmsOrderSetting implements Serializable {
         this.normalOrderOvertime = normalOrderOvertime;
     }
 
-    public Integer getConfirmOvertime() {
-        return confirmOvertime;
+    public Integer getPaymentIntegral() {
+        return paymentIntegral;
     }
 
-    public void setConfirmOvertime(Integer confirmOvertime) {
-        this.confirmOvertime = confirmOvertime;
+    public void setPaymentIntegral(Integer paymentIntegral) {
+        this.paymentIntegral = paymentIntegral;
     }
 
-    public Integer getFinishOvertime() {
-        return finishOvertime;
+    public Integer getOverdueRate() {
+        return overdueRate;
     }
 
-    public void setFinishOvertime(Integer finishOvertime) {
-        this.finishOvertime = finishOvertime;
-    }
-
-    public Integer getCommentOvertime() {
-        return commentOvertime;
-    }
-
-    public void setCommentOvertime(Integer commentOvertime) {
-        this.commentOvertime = commentOvertime;
+    public void setOverdueRate(Integer overdueRate) {
+        this.overdueRate = overdueRate;
     }
 
     @Override
@@ -78,11 +56,9 @@ public class OmsOrderSetting implements Serializable {
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
         sb.append(", id=").append(id);
-        sb.append(", flashOrderOvertime=").append(flashOrderOvertime);
         sb.append(", normalOrderOvertime=").append(normalOrderOvertime);
-        sb.append(", confirmOvertime=").append(confirmOvertime);
-        sb.append(", finishOvertime=").append(finishOvertime);
-        sb.append(", commentOvertime=").append(commentOvertime);
+        sb.append(", paymentIntegral=").append(paymentIntegral);
+        sb.append(", overdueRate=").append(overdueRate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

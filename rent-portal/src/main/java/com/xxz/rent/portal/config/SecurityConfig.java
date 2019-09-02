@@ -27,11 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.headers()
+                .frameOptions()
+                .sameOrigin()
+                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
                         "/",
@@ -40,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.html",
                         "/**/*.css",
                         "/**/*.js",
+                        "/**/*.xml",
                         "/swagger-resources/**",
                         "/v2/api-docs/**"
                 )
@@ -48,11 +52,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(
                         "/sso/*",//登录注册
+                        "/sso/*/*",//登录注册
+                        "/payback/*", //支付回调
                         "/home/**"//首页接口
                 )
                 .permitAll()
-                .antMatchers("/member/**","/returnApply/**")// 测试时开启
-                .permitAll()
+//                .antMatchers("/member/**","/returnApply/**")// 测试时开启
+//                .permitAll()
                 .anyRequest()// 除上面外的所有请求全部需要鉴权认证
                 .authenticated()
                 .and()

@@ -4,17 +4,22 @@ import com.github.pagehelper.PageHelper;
 import com.xxz.rent.mapper.*;
 import com.xxz.rent.model.*;
 import com.xxz.rent.portal.dao.HomeDao;
-import com.xxz.rent.portal.model.dto.FlashPromotionProduct;
+import com.xxz.rent.portal.dao.PmsProductDao;
+import com.xxz.rent.portal.dao.SmsHomeRecommendProductDao;
+import com.xxz.rent.portal.dao.SmsHomeRecommendUsedProductDao;
 import com.xxz.rent.portal.model.dto.HomeContentResult;
 import com.xxz.rent.portal.model.dto.HomeFlashPromotion;
+import com.xxz.rent.portal.model.dto.PmsProductResult;
+import com.xxz.rent.portal.model.dto.SkuProps;
 import com.xxz.rent.portal.service.HomeService;
 import com.xxz.rent.portal.util.DateUtil;
+import io.swagger.annotations.Api;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * 首页内容管理Service实现类
@@ -33,37 +38,51 @@ public class HomeServiceImpl implements HomeService {
     @Autowired
     private PmsProductMapper productMapper;
     @Autowired
+    private PmsProductDao productDao;
+    @Autowired
     private PmsProductCategoryMapper productCategoryMapper;
     @Autowired
     private CmsSubjectMapper subjectMapper;
+    @Autowired
+    private SmsHomeRecommendProductDao recommendProductDao;
+    @Autowired
+    private SmsHomeRecommendUsedProductDao recommendUsedProductDao;
+    @Autowired
+    private PmsProductAttributeCategoryMapper productAttributeCategoryMapper;
+    @Autowired
+    private PmsProductAttributeMapper productAttributeMapper;
+    @Autowired
+    private PmsProductAttributeValueMapper productAttributeValueMapper;
 
     @Override
     public HomeContentResult content() {
         HomeContentResult result = new HomeContentResult();
         //获取首页广告
         result.setAdvertiseList(getHomeAdvertiseList());
-        //获取推荐品牌
-        result.setBrandList(homeDao.getRecommendBrandList(0,4));
-        //获取秒杀信息
-        result.setHomeFlashPromotion(getHomeFlashPromotion());
-        //获取新品推荐
-        result.setNewProductList(homeDao.getNewProductList(0,4));
+        //获取首页分类
+        result.setCategoryList(getHomeCategoryList());
+        //活动活动列表
+        result.setActivityList(homeDao.getActivityList());
         //获取人气推荐
         result.setHotProductList(homeDao.getHotProductList(0,4));
+        //获取精选二手
+        result.setGoodUsedProductList(homeDao.getGoodUsedProductList(0, 4));
         //获取推荐专题
-        result.setSubjectList(homeDao.getRecommendSubjectList(0,4));
+        result.setSubjectList(homeDao.getRecommendSubjectList(0,6));
         return result;
+    }
+
+    private List<PmsProductCategory> getHomeCategoryList() {
+        PmsProductCategoryExample example = new PmsProductCategoryExample();
+        example.createCriteria().andShowStatusEqualTo(1).andNavStatusEqualTo(1).andLevelEqualTo(0);
+        example.setOrderByClause("sort desc");
+        return productCategoryMapper.selectByExample(example);
     }
 
     @Override
     public List<PmsProduct> recommendProductList(Integer pageSize, Integer pageNum) {
-        // TODO: 2019/1/29 暂时默认推荐所有商品
         PageHelper.startPage(pageNum,pageSize);
-        PmsProductExample example = new PmsProductExample();
-        example.createCriteria()
-                .andDeleteStatusEqualTo(0)
-                .andPublishStatusEqualTo(1);
-        return productMapper.selectByExample(example);
+        return recommendUsedProductDao.recommendProductList();
     }
 
     @Override
@@ -82,11 +101,105 @@ public class HomeServiceImpl implements HomeService {
         CmsSubjectExample example = new CmsSubjectExample();
         CmsSubjectExample.Criteria criteria = example.createCriteria();
         criteria.andShowStatusEqualTo(1);
-        if(cateId!=null){
-            criteria.andCategoryIdEqualTo(cateId);
-        }
         return subjectMapper.selectByExample(example);
     }
+
+    @Override
+    public List<PmsProduct> goodUsedProductList(Integer pageSize, Integer pageNum) {
+        PageHelper.startPage(pageSize, pageNum);
+        return recommendProductDao.goodUsedProductList();
+    }
+
+    @Override
+    public List<PmsProduct> productList(Long id, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        PmsProductExample example = new PmsProductExample();
+        example.createCriteria().andProductCategoryIdEqualTo(id)
+            .andDeleteStatusEqualTo(0).andPublishStatusEqualTo(1);
+        return productMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<PmsProduct> getPorductListBySubjectId(Long id, Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        return homeDao.getPorductListBySubjectId(id);
+    }
+
+    @Override
+    public PmsProductResult getProductDetail(Long id) {
+        PmsProductResult productResult = productDao.getProductDetail(id);
+        List<SkuProps> skuPropsList = new ArrayList<>();
+        //加载该产品具有的SKU名称
+        PmsProductAttributeExample example = new PmsProductAttributeExample();
+        //加载该类型下的所有SKU属性, 0->属性 2->参数
+        example.createCriteria().andProductAttributeCategoryIdEqualTo(productResult.getProductAttributeCategoryId()).andTypeEqualTo(0);
+        List<PmsProductAttribute> attributeList = productAttributeMapper.selectByExample(example);
+
+        for (int i = 0; i < attributeList.size(); i++) {
+            PmsProductAttribute attribute = attributeList.get(i);
+            if(Objects.equals(1, attribute.getHandAddStatus())) {
+                //加载该属性集合
+                PmsProductAttributeValueExample valueExample = new PmsProductAttributeValueExample();
+                valueExample.createCriteria().andProductAttributeIdEqualTo(attribute.getId()).andProductIdEqualTo(id);
+                List<PmsProductAttributeValue> attributeValues = productAttributeValueMapper.selectByExample(valueExample);
+                //创建SKUProps
+                SkuProps skuProps = new SkuProps();
+                skuProps.setName(attribute.getName());
+                skuProps.setValue(attributeValues.get(0).getValue());
+                skuPropsList.add(skuProps);
+            }else{
+                //选中的属性
+                SkuProps skuProps = getEditAttrValue(productResult.getPmsSkuStockList(), attribute, i);
+                if(skuProps != null) {
+                    skuPropsList.add(skuProps);
+                }
+            }
+        }
+        productResult.setSkuPropsList(skuPropsList);
+        return productResult;
+    }
+
+    private SkuProps getEditAttrValue(List<PmsSkuStock> skuStockList, PmsProductAttribute attribute, int index) {
+        SkuProps skuProps = new SkuProps();
+        List<String> values = new ArrayList<>();
+        if(index == 0) {
+            for (int i = 0; i < skuStockList.size(); i++) {
+                PmsSkuStock skuStock = skuStockList.get(i);
+                if(skuStock.getSp1() != null && attribute.getInputList().contains(skuStock.getSp1())) {
+                       skuProps.setName(attribute.getName());
+                       if(!values.contains(skuStock.getSp1())) {
+                           values.add(skuStock.getSp1());
+                       }
+                }
+            }
+        }else if(index == 1) {
+            for (int i = 0; i < skuStockList.size(); i++) {
+                PmsSkuStock skuStock = skuStockList.get(i);
+                if(skuStock.getSp2() != null && attribute.getInputList().contains(skuStock.getSp2())) {
+                    skuProps.setName(attribute.getName());
+                    if(!values.contains(skuStock.getSp2())) {
+                        values.add(skuStock.getSp2());
+                    }
+                }
+            }
+        }else if(index == 2) {
+            for (int i = 0; i < skuStockList.size(); i++) {
+                PmsSkuStock skuStock = skuStockList.get(i);
+                if(skuStock.getSp3() != null && attribute.getInputList().contains(skuStock.getSp3())) {
+                    skuProps.setName(attribute.getName());
+                    if(!values.contains(skuStock.getSp3())) {
+                        values.add(skuStock.getSp3());
+                    }
+                }
+            }
+        }
+        if(values.size() == 0) {
+            return null;
+        }
+        skuProps.setValue(StringUtils.join(values, ","));
+        return skuProps;
+    }
+
 
     private HomeFlashPromotion getHomeFlashPromotion() {
         HomeFlashPromotion homeFlashPromotion = new HomeFlashPromotion();
@@ -106,8 +219,8 @@ public class HomeServiceImpl implements HomeService {
                     homeFlashPromotion.setNextEndTime(nextSession.getEndTime());
                 }
                 //获取秒杀商品
-                List<FlashPromotionProduct> flashProductList = homeDao.getFlashProductList(flashPromotion.getId(), flashPromotionSession.getId());
-                homeFlashPromotion.setProductList(flashProductList);
+//                List<FlashPromotionProduct> flashProductList = homeDao.getFlashProductList(flashPromotion.getId(), flashPromotionSession.getId());
+//                homeFlashPromotion.setProductList(flashProductList);
             }
         }
         return homeFlashPromotion;

@@ -13,7 +13,9 @@ import java.util.List;
 
 /**
  * 会员收货地址管理Controller
- * Created by macro on 2018/8/28.
+ *
+ * @author xxz
+ * @date 2018/8/28
  */
 @Controller
 @Api(tags = "UmsMemberReceiveAddressController", description = "会员收货地址管理")
@@ -63,7 +65,7 @@ public class UmsMemberReceiveAddressController {
         return CommonResult.success(addressList);
     }
 
-    @ApiOperation("显示所有收货地址")
+    @ApiOperation("根据ID显示收货地址")
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<UmsMemberReceiveAddress> getItem(@PathVariable Long id) {

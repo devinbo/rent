@@ -19,19 +19,19 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "提交时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "用户帐号")
+    @ApiModelProperty(value = "用户姓名")
     private String memberUsername;
 
-    @ApiModelProperty(value = "订单总金额")
-    private BigDecimal totalAmount;
+    @ApiModelProperty(value = "订单总金额（签约）")
+    private BigDecimal signAmount;
 
-    @ApiModelProperty(value = "应付金额（实际支付金额）")
+    @ApiModelProperty(value = "实际应支付押金金额")
     private BigDecimal payAmount;
 
     @ApiModelProperty(value = "运费金额")
     private BigDecimal freightAmount;
 
-    @ApiModelProperty(value = "促销优化金额（促销价、满减、阶梯价）")
+    @ApiModelProperty(value = "促销优惠金额（首期减免、满减）")
     private BigDecimal promotionAmount;
 
     @ApiModelProperty(value = "积分抵扣金额")
@@ -49,11 +49,8 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "订单来源：0->PC订单；1->app订单")
     private Integer sourceType;
 
-    @ApiModelProperty(value = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
+    @ApiModelProperty(value = "订单状态：0->待付押金；1->待审核；2->签约中；3->已归还；4->已买断；5->已取消；6->已拒绝；7->待买断；8->待签约；9->已结清")
     private Integer status;
-
-    @ApiModelProperty(value = "订单类型：0->正常订单；1->秒杀订单")
-    private Integer orderType;
 
     @ApiModelProperty(value = "物流公司(配送方式)")
     private String deliveryCompany;
@@ -61,32 +58,11 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "物流单号")
     private String deliverySn;
 
-    @ApiModelProperty(value = "自动确认时间（天）")
-    private Integer autoConfirmDay;
-
     @ApiModelProperty(value = "可以获得的积分")
     private Integer integration;
 
-    @ApiModelProperty(value = "可以活动的成长值")
-    private Integer growth;
-
     @ApiModelProperty(value = "活动信息")
     private String promotionInfo;
-
-    @ApiModelProperty(value = "发票类型：0->不开发票；1->电子发票；2->纸质发票")
-    private Integer billType;
-
-    @ApiModelProperty(value = "发票抬头")
-    private String billHeader;
-
-    @ApiModelProperty(value = "发票内容")
-    private String billContent;
-
-    @ApiModelProperty(value = "收票人电话")
-    private String billReceiverPhone;
-
-    @ApiModelProperty(value = "收票人邮箱")
-    private String billReceiverEmail;
 
     @ApiModelProperty(value = "收货人姓名")
     private String receiverName;
@@ -118,23 +94,83 @@ public class OmsOrder implements Serializable {
     @ApiModelProperty(value = "删除状态：0->未删除；1->已删除")
     private Integer deleteStatus;
 
-    @ApiModelProperty(value = "下单时使用的积分")
+    @ApiModelProperty(value = "下单时使用的积分(后续积分商城使用)")
     private Integer useIntegration;
 
-    @ApiModelProperty(value = "支付时间")
+    @ApiModelProperty(value = "支付押金时间")
     private Date paymentTime;
-
-    @ApiModelProperty(value = "发货时间")
-    private Date deliveryTime;
 
     @ApiModelProperty(value = "确认收货时间")
     private Date receiveTime;
 
-    @ApiModelProperty(value = "评价时间")
+    @ApiModelProperty(value = "订单完成时间")
     private Date commentTime;
 
     @ApiModelProperty(value = "修改时间")
     private Date modifyTime;
+
+    @ApiModelProperty(value = "用户手机号")
+    private String memberPhone;
+
+    @ApiModelProperty(value = "完成类型： 0->未完成； 1->归还；2->买断")
+    private Integer completeType;
+
+    @ApiModelProperty(value = "签约开始时间")
+    private Date sigeStartTime;
+
+    @ApiModelProperty(value = "签约截止时间")
+    private Date sigeEndTime;
+
+    @ApiModelProperty(value = "拒绝原因")
+    private String refuseReason;
+
+    @ApiModelProperty(value = "订单审核时间")
+    private Date auditTime;
+
+    @ApiModelProperty(value = "会员本次使用的免押额度")
+    private BigDecimal freeMoney;
+
+    @ApiModelProperty(value = "实际签约价(参与减免之后)")
+    private BigDecimal realsignMoney;
+
+    @ApiModelProperty(value = "优惠券名称")
+    private String couponName;
+
+    @ApiModelProperty(value = "租金状态 0->正常；1->逾期 ")
+    private Integer rentState;
+
+    @ApiModelProperty(value = "租金应支付时间")
+    private Date rentPayTime;
+
+    @ApiModelProperty(value = "当前应付租金")
+    private BigDecimal rentPayMoney;
+
+    @ApiModelProperty(value = "订单类型： 0->尚未开始；1->租赁中； 2->由租转售")
+    private Integer orderType;
+
+    @ApiModelProperty(value = "每期租金")
+    private BigDecimal eachPrice;
+
+    @ApiModelProperty(value = "期数")
+    private Integer periods;
+
+    @ApiModelProperty(value = "期数单位: 0->日；1->周；2->月；3->年")
+    private Integer unit;
+
+    @ApiModelProperty(value = "IMEI号")
+    private String imeiNo;
+
+    @ApiModelProperty(value = "签约文件")
+    private String signFile;
+
+    @ApiModelProperty(value = "当前第几期")
+    private Integer currPeriod;
+
+    @ApiModelProperty(value = "交易方式 0->自提；1->邮寄")
+    private Integer traceType;
+
+    @ApiModelProperty(value = "期望的交易日期")
+    private Date traceDate;
 
     private static final long serialVersionUID = 1L;
 
@@ -186,12 +222,12 @@ public class OmsOrder implements Serializable {
         this.memberUsername = memberUsername;
     }
 
-    public BigDecimal getTotalAmount() {
-        return totalAmount;
+    public BigDecimal getSignAmount() {
+        return signAmount;
     }
 
-    public void setTotalAmount(BigDecimal totalAmount) {
-        this.totalAmount = totalAmount;
+    public void setSignAmount(BigDecimal signAmount) {
+        this.signAmount = signAmount;
     }
 
     public BigDecimal getPayAmount() {
@@ -266,14 +302,6 @@ public class OmsOrder implements Serializable {
         this.status = status;
     }
 
-    public Integer getOrderType() {
-        return orderType;
-    }
-
-    public void setOrderType(Integer orderType) {
-        this.orderType = orderType;
-    }
-
     public String getDeliveryCompany() {
         return deliveryCompany;
     }
@@ -290,14 +318,6 @@ public class OmsOrder implements Serializable {
         this.deliverySn = deliverySn;
     }
 
-    public Integer getAutoConfirmDay() {
-        return autoConfirmDay;
-    }
-
-    public void setAutoConfirmDay(Integer autoConfirmDay) {
-        this.autoConfirmDay = autoConfirmDay;
-    }
-
     public Integer getIntegration() {
         return integration;
     }
@@ -306,60 +326,12 @@ public class OmsOrder implements Serializable {
         this.integration = integration;
     }
 
-    public Integer getGrowth() {
-        return growth;
-    }
-
-    public void setGrowth(Integer growth) {
-        this.growth = growth;
-    }
-
     public String getPromotionInfo() {
         return promotionInfo;
     }
 
     public void setPromotionInfo(String promotionInfo) {
         this.promotionInfo = promotionInfo;
-    }
-
-    public Integer getBillType() {
-        return billType;
-    }
-
-    public void setBillType(Integer billType) {
-        this.billType = billType;
-    }
-
-    public String getBillHeader() {
-        return billHeader;
-    }
-
-    public void setBillHeader(String billHeader) {
-        this.billHeader = billHeader;
-    }
-
-    public String getBillContent() {
-        return billContent;
-    }
-
-    public void setBillContent(String billContent) {
-        this.billContent = billContent;
-    }
-
-    public String getBillReceiverPhone() {
-        return billReceiverPhone;
-    }
-
-    public void setBillReceiverPhone(String billReceiverPhone) {
-        this.billReceiverPhone = billReceiverPhone;
-    }
-
-    public String getBillReceiverEmail() {
-        return billReceiverEmail;
-    }
-
-    public void setBillReceiverEmail(String billReceiverEmail) {
-        this.billReceiverEmail = billReceiverEmail;
     }
 
     public String getReceiverName() {
@@ -458,14 +430,6 @@ public class OmsOrder implements Serializable {
         this.paymentTime = paymentTime;
     }
 
-    public Date getDeliveryTime() {
-        return deliveryTime;
-    }
-
-    public void setDeliveryTime(Date deliveryTime) {
-        this.deliveryTime = deliveryTime;
-    }
-
     public Date getReceiveTime() {
         return receiveTime;
     }
@@ -490,6 +454,174 @@ public class OmsOrder implements Serializable {
         this.modifyTime = modifyTime;
     }
 
+    public String getMemberPhone() {
+        return memberPhone;
+    }
+
+    public void setMemberPhone(String memberPhone) {
+        this.memberPhone = memberPhone;
+    }
+
+    public Integer getCompleteType() {
+        return completeType;
+    }
+
+    public void setCompleteType(Integer completeType) {
+        this.completeType = completeType;
+    }
+
+    public Date getSigeStartTime() {
+        return sigeStartTime;
+    }
+
+    public void setSigeStartTime(Date sigeStartTime) {
+        this.sigeStartTime = sigeStartTime;
+    }
+
+    public Date getSigeEndTime() {
+        return sigeEndTime;
+    }
+
+    public void setSigeEndTime(Date sigeEndTime) {
+        this.sigeEndTime = sigeEndTime;
+    }
+
+    public String getRefuseReason() {
+        return refuseReason;
+    }
+
+    public void setRefuseReason(String refuseReason) {
+        this.refuseReason = refuseReason;
+    }
+
+    public Date getAuditTime() {
+        return auditTime;
+    }
+
+    public void setAuditTime(Date auditTime) {
+        this.auditTime = auditTime;
+    }
+
+    public BigDecimal getFreeMoney() {
+        return freeMoney;
+    }
+
+    public void setFreeMoney(BigDecimal freeMoney) {
+        this.freeMoney = freeMoney;
+    }
+
+    public BigDecimal getRealsignMoney() {
+        return realsignMoney;
+    }
+
+    public void setRealsignMoney(BigDecimal realsignMoney) {
+        this.realsignMoney = realsignMoney;
+    }
+
+    public String getCouponName() {
+        return couponName;
+    }
+
+    public void setCouponName(String couponName) {
+        this.couponName = couponName;
+    }
+
+    public Integer getRentState() {
+        return rentState;
+    }
+
+    public void setRentState(Integer rentState) {
+        this.rentState = rentState;
+    }
+
+    public Date getRentPayTime() {
+        return rentPayTime;
+    }
+
+    public void setRentPayTime(Date rentPayTime) {
+        this.rentPayTime = rentPayTime;
+    }
+
+    public BigDecimal getRentPayMoney() {
+        return rentPayMoney;
+    }
+
+    public void setRentPayMoney(BigDecimal rentPayMoney) {
+        this.rentPayMoney = rentPayMoney;
+    }
+
+    public Integer getOrderType() {
+        return orderType;
+    }
+
+    public void setOrderType(Integer orderType) {
+        this.orderType = orderType;
+    }
+
+    public BigDecimal getEachPrice() {
+        return eachPrice;
+    }
+
+    public void setEachPrice(BigDecimal eachPrice) {
+        this.eachPrice = eachPrice;
+    }
+
+    public Integer getPeriods() {
+        return periods;
+    }
+
+    public void setPeriods(Integer periods) {
+        this.periods = periods;
+    }
+
+    public Integer getUnit() {
+        return unit;
+    }
+
+    public void setUnit(Integer unit) {
+        this.unit = unit;
+    }
+
+    public String getImeiNo() {
+        return imeiNo;
+    }
+
+    public void setImeiNo(String imeiNo) {
+        this.imeiNo = imeiNo;
+    }
+
+    public String getSignFile() {
+        return signFile;
+    }
+
+    public void setSignFile(String signFile) {
+        this.signFile = signFile;
+    }
+
+    public Integer getCurrPeriod() {
+        return currPeriod;
+    }
+
+    public void setCurrPeriod(Integer currPeriod) {
+        this.currPeriod = currPeriod;
+    }
+
+    public Integer getTraceType() {
+        return traceType;
+    }
+
+    public void setTraceType(Integer traceType) {
+        this.traceType = traceType;
+    }
+
+    public Date getTraceDate() {
+        return traceDate;
+    }
+
+    public void setTraceDate(Date traceDate) {
+        this.traceDate = traceDate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -502,7 +634,7 @@ public class OmsOrder implements Serializable {
         sb.append(", orderSn=").append(orderSn);
         sb.append(", createTime=").append(createTime);
         sb.append(", memberUsername=").append(memberUsername);
-        sb.append(", totalAmount=").append(totalAmount);
+        sb.append(", signAmount=").append(signAmount);
         sb.append(", payAmount=").append(payAmount);
         sb.append(", freightAmount=").append(freightAmount);
         sb.append(", promotionAmount=").append(promotionAmount);
@@ -512,18 +644,10 @@ public class OmsOrder implements Serializable {
         sb.append(", payType=").append(payType);
         sb.append(", sourceType=").append(sourceType);
         sb.append(", status=").append(status);
-        sb.append(", orderType=").append(orderType);
         sb.append(", deliveryCompany=").append(deliveryCompany);
         sb.append(", deliverySn=").append(deliverySn);
-        sb.append(", autoConfirmDay=").append(autoConfirmDay);
         sb.append(", integration=").append(integration);
-        sb.append(", growth=").append(growth);
         sb.append(", promotionInfo=").append(promotionInfo);
-        sb.append(", billType=").append(billType);
-        sb.append(", billHeader=").append(billHeader);
-        sb.append(", billContent=").append(billContent);
-        sb.append(", billReceiverPhone=").append(billReceiverPhone);
-        sb.append(", billReceiverEmail=").append(billReceiverEmail);
         sb.append(", receiverName=").append(receiverName);
         sb.append(", receiverPhone=").append(receiverPhone);
         sb.append(", receiverPostCode=").append(receiverPostCode);
@@ -536,10 +660,30 @@ public class OmsOrder implements Serializable {
         sb.append(", deleteStatus=").append(deleteStatus);
         sb.append(", useIntegration=").append(useIntegration);
         sb.append(", paymentTime=").append(paymentTime);
-        sb.append(", deliveryTime=").append(deliveryTime);
         sb.append(", receiveTime=").append(receiveTime);
         sb.append(", commentTime=").append(commentTime);
         sb.append(", modifyTime=").append(modifyTime);
+        sb.append(", memberPhone=").append(memberPhone);
+        sb.append(", completeType=").append(completeType);
+        sb.append(", sigeStartTime=").append(sigeStartTime);
+        sb.append(", sigeEndTime=").append(sigeEndTime);
+        sb.append(", refuseReason=").append(refuseReason);
+        sb.append(", auditTime=").append(auditTime);
+        sb.append(", freeMoney=").append(freeMoney);
+        sb.append(", realsignMoney=").append(realsignMoney);
+        sb.append(", couponName=").append(couponName);
+        sb.append(", rentState=").append(rentState);
+        sb.append(", rentPayTime=").append(rentPayTime);
+        sb.append(", rentPayMoney=").append(rentPayMoney);
+        sb.append(", orderType=").append(orderType);
+        sb.append(", eachPrice=").append(eachPrice);
+        sb.append(", periods=").append(periods);
+        sb.append(", unit=").append(unit);
+        sb.append(", imeiNo=").append(imeiNo);
+        sb.append(", signFile=").append(signFile);
+        sb.append(", currPeriod=").append(currPeriod);
+        sb.append(", traceType=").append(traceType);
+        sb.append(", traceDate=").append(traceDate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

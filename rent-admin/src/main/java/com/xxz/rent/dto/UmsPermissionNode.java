@@ -14,4 +14,5 @@ public class UmsPermissionNode extends UmsPermission {
     @Getter
     @Setter
     private List<UmsPermissionNode> children;
+
 }

@@ -16,11 +16,17 @@ public class OmsOrderOperateHistory implements Serializable {
     @ApiModelProperty(value = "操作时间")
     private Date createTime;
 
-    @ApiModelProperty(value = "订单状态：0->待付款；1->待发货；2->已发货；3->已完成；4->已关闭；5->无效订单")
+    @ApiModelProperty(value = "订单状态：0->待付款；1->待审核；2->签约中；3->已归还；4->已买断；5->无效订单；6->审核拒绝；7->待买断；8->待签约")
     private Integer orderStatus;
 
-    @ApiModelProperty(value = "备注")
+    @ApiModelProperty(value = "本次操作客户手动备注信息")
     private String note;
+
+    @ApiModelProperty(value = "操作具体内容")
+    private String content;
+
+    @ApiModelProperty(value = "操作类型：0->修改；1->审核；2->结算；3->取消； 4->删除；5->签约完成；")
+    private Integer operateType;
 
     private static final long serialVersionUID = 1L;
 
@@ -72,6 +78,22 @@ public class OmsOrderOperateHistory implements Serializable {
         this.note = note;
     }
 
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Integer getOperateType() {
+        return operateType;
+    }
+
+    public void setOperateType(Integer operateType) {
+        this.operateType = operateType;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -84,6 +106,8 @@ public class OmsOrderOperateHistory implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", orderStatus=").append(orderStatus);
         sb.append(", note=").append(note);
+        sb.append(", content=").append(content);
+        sb.append(", operateType=").append(operateType);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

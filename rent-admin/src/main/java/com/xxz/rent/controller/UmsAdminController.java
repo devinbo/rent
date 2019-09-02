@@ -2,26 +2,38 @@ package com.xxz.rent.controller;
 
 import com.xxz.rent.common.api.CommonPage;
 import com.xxz.rent.common.api.CommonResult;
+import com.xxz.rent.constant.SysConstant;
+import com.xxz.rent.dto.PageParam;
 import com.xxz.rent.dto.UmsAdminLoginParam;
 import com.xxz.rent.dto.UmsAdminParam;
+import com.xxz.rent.service.RedisService;
 import com.xxz.rent.service.UmsAdminService;
 import com.xxz.rent.model.UmsAdmin;
 import com.xxz.rent.model.UmsPermission;
 import com.xxz.rent.model.UmsRole;
+import com.xxz.rent.service.UmsPermissionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 后台用户管理
@@ -33,10 +45,23 @@ import java.util.Map;
 public class UmsAdminController {
     @Autowired
     private UmsAdminService adminService;
+
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private UmsPermissionService umsPermissionService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
+    @Value("${redis.key.prefix.adminUsername}")
+    private String ADMINUSERNAME;
+    @Value("${redis.key.expire.admin}")
+    private Long ADMINVALIDTIME;
+    @Value("${redis.key.prefix.adminPermission}")
+    private String ADMINPERMISSION;
+
 
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -81,14 +106,26 @@ public class UmsAdminController {
     @ApiOperation(value = "获取当前登录用户信息")
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult getAdminInfo(Principal principal) {
+    public CommonResult getAdminInfo(Principal principal, HttpServletRequest request) {
         String username = principal.getName();
         UmsAdmin umsAdmin = adminService.getAdminByUsername(username);
         Map<String, Object> data = new HashMap<>(3);
         data.put("username", umsAdmin.getUsername());
         data.put("roles", new String[]{"TEST"});
+        List<UmsPermission> permissionList;
+        permissionList = adminService.getPermissionList(umsAdmin.getId());
+        data.put("permission", permissionList);
         data.put("icon", umsAdmin.getIcon());
+        //刷新页面到时候，直接刷新权限
+        redisService.setObj(ADMINPERMISSION + umsAdmin.getId(), permissionList, ADMINVALIDTIME);
         return CommonResult.success(data);
+    }
+
+    private Collection<? extends GrantedAuthority> dealAuth(List<UmsPermission> permissionList) {
+        return permissionList.stream()
+                .filter(permission -> !StringUtils.isEmpty(permission.getValue()))
+                .map(permission ->new SimpleGrantedAuthority(permission.getValue()))
+                .collect(Collectors.toList());
     }
 
     @ApiOperation(value = "登出功能")
@@ -102,9 +139,8 @@ public class UmsAdminController {
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     @ResponseBody
     public CommonResult<CommonPage<UmsAdmin>> list(@RequestParam(value = "name", required = false) String name,
-                                                   @RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
-                                                   @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        List<UmsAdmin> adminList = adminService.list(name, pageSize, pageNum);
+                                                   PageParam pageParam) {
+        List<UmsAdmin> adminList = adminService.list(name, pageParam);
         return CommonResult.success(CommonPage.restPage(adminList));
     }
 
@@ -129,6 +165,7 @@ public class UmsAdminController {
 
     @ApiOperation("删除指定用户信息")
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('sms:admin:delete')")
     @ResponseBody
     public CommonResult delete(@PathVariable Long id) {
         int count = adminService.delete(id);
@@ -138,8 +175,10 @@ public class UmsAdminController {
         return CommonResult.failed();
     }
 
+
     @ApiOperation("给用户分配角色")
     @RequestMapping(value = "/role/update", method = RequestMethod.POST)
+    @PreAuthorize("hasAnyAuthority('sms:admin:update', 'smsm:admin:create')")
     @ResponseBody
     public CommonResult updateRole(@RequestParam("adminId") Long adminId,
                                    @RequestParam("roleIds") List<Long> roleIds) {

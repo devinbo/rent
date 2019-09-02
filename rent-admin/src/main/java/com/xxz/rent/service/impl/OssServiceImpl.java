@@ -12,10 +12,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by macro on 2018/5/17.
@@ -36,6 +43,10 @@ public class OssServiceImpl implements OssService {
 	private String ALIYUN_OSS_ENDPOINT;
 	@Value("${aliyun.oss.dir.prefix}")
 	private String ALIYUN_OSS_DIR_PREFIX;
+	@Value("${aliyun.oss.accessKeyId}")
+	private String accessKeyId;
+	@Value("${aliyun.oss.accessKeySecret}")
+	private String accessKeySecret;
 
 	@Autowired
 	private OSSClient ossClient;
@@ -55,10 +66,7 @@ public class OssServiceImpl implements OssService {
 		// 文件大小
 		long maxSize = ALIYUN_OSS_MAX_SIZE * 1024 * 1024;
 		// 回调
-//		OssCallbackParam callback = new OssCallbackParam();
-//		callback.setCallbackUrl(ALIYUN_OSS_CALLBACK);
-//		callback.setCallbackBody("filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}");
-//		callback.setCallbackBodyType("application/x-www-form-urlencoded");
+
 		// 提交节点
 		String action = "http://" + ALIYUN_OSS_BUCKET_NAME + "." + ALIYUN_OSS_ENDPOINT;
 		try {
@@ -69,13 +77,11 @@ public class OssServiceImpl implements OssService {
 			byte[] binaryData = postPolicy.getBytes("utf-8");
 			String policy = BinaryUtil.toBase64String(binaryData);
 			String signature = ossClient.calculatePostSignature(postPolicy);
-//			String callbackData = BinaryUtil.toBase64String(JSONUtil.parse(callback).toString().getBytes("utf-8"));
 			// 返回结果
 			result.setAccessKeyId(ossClient.getCredentialsProvider().getCredentials().getAccessKeyId());
 			result.setPolicy(policy);
 			result.setSignature(signature);
 			result.setDir(dir);
-//			result.setCallback(callbackData);
 			result.setHost(action);
 		} catch (Exception e) {
 			LOGGER.error("签名生成失败", e);
@@ -96,4 +102,19 @@ public class OssServiceImpl implements OssService {
 		return result;
 	}
 
+
+	@Override
+	public String uploadWithUrl(String url, String dirPrefix) throws IOException {
+		OSSClient ossClient = new OSSClient(ALIYUN_OSS_ENDPOINT, accessKeyId, accessKeySecret);
+		// 上传网络流。
+		InputStream inputStream = new URL(url).openStream();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		String filename = UUID.randomUUID().toString() + ".jpg";
+		String objectName = StringUtils.isEmpty(dirPrefix) ? (ALIYUN_OSS_DIR_PREFIX+sdf.format(new Date())) : dirPrefix
+				+ sdf.format(new Date()) + File.separator + filename;
+		ossClient.putObject(ALIYUN_OSS_BUCKET_NAME, objectName, inputStream);
+		// 关闭OSSClient。
+		ossClient.shutdown();
+		return "Https" + ALIYUN_OSS_ENDPOINT + "/" + objectName;
+	}
 }

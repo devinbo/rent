@@ -864,6 +864,186 @@ public class SmsHomeAdvertiseExample {
             addCriterion("sort not between", value1, value2, "sort");
             return (Criteria) this;
         }
+
+        public Criteria andLinkTypeIsNull() {
+            addCriterion("link_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeIsNotNull() {
+            addCriterion("link_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeEqualTo(Integer value) {
+            addCriterion("link_type =", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeNotEqualTo(Integer value) {
+            addCriterion("link_type <>", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeGreaterThan(Integer value) {
+            addCriterion("link_type >", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("link_type >=", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeLessThan(Integer value) {
+            addCriterion("link_type <", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("link_type <=", value, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeIn(List<Integer> values) {
+            addCriterion("link_type in", values, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeNotIn(List<Integer> values) {
+            addCriterion("link_type not in", values, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeBetween(Integer value1, Integer value2) {
+            addCriterion("link_type between", value1, value2, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andLinkTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("link_type not between", value1, value2, "linkType");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNull() {
+            addCriterion("product_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIsNotNull() {
+            addCriterion("product_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdEqualTo(Long value) {
+            addCriterion("product_id =", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotEqualTo(Long value) {
+            addCriterion("product_id <>", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThan(Long value) {
+            addCriterion("product_id >", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("product_id >=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThan(Long value) {
+            addCriterion("product_id <", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdLessThanOrEqualTo(Long value) {
+            addCriterion("product_id <=", value, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdIn(List<Long> values) {
+            addCriterion("product_id in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotIn(List<Long> values) {
+            addCriterion("product_id not in", values, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdBetween(Long value1, Long value2) {
+            addCriterion("product_id between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductIdNotBetween(Long value1, Long value2) {
+            addCriterion("product_id not between", value1, value2, "productId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdIsNull() {
+            addCriterion("subject_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdIsNotNull() {
+            addCriterion("subject_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdEqualTo(Long value) {
+            addCriterion("subject_id =", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdNotEqualTo(Long value) {
+            addCriterion("subject_id <>", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdGreaterThan(Long value) {
+            addCriterion("subject_id >", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdGreaterThanOrEqualTo(Long value) {
+            addCriterion("subject_id >=", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdLessThan(Long value) {
+            addCriterion("subject_id <", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdLessThanOrEqualTo(Long value) {
+            addCriterion("subject_id <=", value, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdIn(List<Long> values) {
+            addCriterion("subject_id in", values, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdNotIn(List<Long> values) {
+            addCriterion("subject_id not in", values, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdBetween(Long value1, Long value2) {
+            addCriterion("subject_id between", value1, value2, "subjectId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSubjectIdNotBetween(Long value1, Long value2) {
+            addCriterion("subject_id not between", value1, value2, "subjectId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

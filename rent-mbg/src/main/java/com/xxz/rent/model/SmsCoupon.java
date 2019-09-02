@@ -13,9 +13,6 @@ public class SmsCoupon implements Serializable {
 
     private String name;
 
-    @ApiModelProperty(value = "使用平台：0->全部；1->移动；2->PC")
-    private Integer platform;
-
     @ApiModelProperty(value = "数量")
     private Integer count;
 
@@ -28,8 +25,10 @@ public class SmsCoupon implements Serializable {
     @ApiModelProperty(value = "使用门槛；0表示无门槛")
     private BigDecimal minPoint;
 
+    @ApiModelProperty(value = "开始时间")
     private Date startTime;
 
+    @ApiModelProperty(value = "失效时间")
     private Date endTime;
 
     @ApiModelProperty(value = "使用类型：0->全场通用；1->指定分类；2->指定商品")
@@ -56,6 +55,9 @@ public class SmsCoupon implements Serializable {
     @ApiModelProperty(value = "可领取的会员类型：0->无限时")
     private Integer memberLevel;
 
+    @ApiModelProperty(value = "种类：0->通用； 1->押金抵用券；2->租金抵用券")
+    private Integer cate;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -80,14 +82,6 @@ public class SmsCoupon implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Integer getPlatform() {
-        return platform;
-    }
-
-    public void setPlatform(Integer platform) {
-        this.platform = platform;
     }
 
     public Integer getCount() {
@@ -202,6 +196,14 @@ public class SmsCoupon implements Serializable {
         this.memberLevel = memberLevel;
     }
 
+    public Integer getCate() {
+        return cate;
+    }
+
+    public void setCate(Integer cate) {
+        this.cate = cate;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -211,7 +213,6 @@ public class SmsCoupon implements Serializable {
         sb.append(", id=").append(id);
         sb.append(", type=").append(type);
         sb.append(", name=").append(name);
-        sb.append(", platform=").append(platform);
         sb.append(", count=").append(count);
         sb.append(", amount=").append(amount);
         sb.append(", perLimit=").append(perLimit);
@@ -226,6 +227,7 @@ public class SmsCoupon implements Serializable {
         sb.append(", enableTime=").append(enableTime);
         sb.append(", code=").append(code);
         sb.append(", memberLevel=").append(memberLevel);
+        sb.append(", cate=").append(cate);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

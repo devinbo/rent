@@ -1,6 +1,8 @@
 package com.xxz.rent.portal.dao;
 
+import com.xxz.rent.model.SmsCoupon;
 import com.xxz.rent.portal.model.dto.SmsCouponHistoryDetail;
+import com.xxz.rent.portal.model.dto.SmsCouponHistoryResult;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,4 +13,8 @@ import java.util.List;
  */
 public interface SmsCouponHistoryDao {
     List<SmsCouponHistoryDetail> getDetailList(@Param("memberId") Long memberId);
+
+    List<SmsCouponHistoryResult> list(@Param("memberId") Long memberId, @Param("useStatus") Integer useStatus);
+
+    SmsCoupon getCouponByHistoryId(@Param("couponId") Long couponId);
 }

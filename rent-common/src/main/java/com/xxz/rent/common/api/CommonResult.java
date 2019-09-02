@@ -1,11 +1,19 @@
 package com.xxz.rent.common.api;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+
 /**
  * 通用返回对象
- * Created by macro on 2019/4/19.
+ *
+ * @author xxz
+ * @date 2019/4/19
  */
 public class CommonResult<T> {
+    @ApiModelProperty(value = "状态：200->操作成功；500->操作失败；404->参数检验失败；401->没有登陆；404->权限不足")
     private long code;
+    @ApiModelProperty(value = "本次操作成功/错误描述")
     private String message;
     private T data;
 
@@ -77,6 +85,14 @@ public class CommonResult<T> {
      */
     public static <T> CommonResult<T> validateFailed(String message) {
         return new CommonResult<T>(ResultCode.VALIDATE_FAILED.getCode(), message, null);
+    }
+
+    /**
+     * 未登陆
+     */
+    public static <T> CommonResult<T> unauthorized(String message) {
+        return new CommonResult<T>(ResultCode.UNAUTHORIZED.getCode(),
+                (message == null || "".equals(message)) ? message : ResultCode.UNAUTHORIZED.getMessage(), null);
     }
 
     /**

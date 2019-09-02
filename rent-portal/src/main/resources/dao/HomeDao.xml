@@ -61,16 +61,49 @@
         LIMIT #{offset}, #{limit};
     </select>
 
-    <select id="getRecommendSubjectList" resultMap="com.xxz.rent.mapper.CmsSubjectMapper.BaseResultMap">
+    <resultMap id="subjectResultMap" type="com.xxz.rent.portal.model.dto.CmsSubjectResult" extends="com.xxz.rent.mapper.CmsSubjectMapper.BaseResultMap">
+        <collection property="productList" select="getSubjectProduct" column="id"/>
+    </resultMap>
+
+    <select id="getSubjectProduct" resultType="com.xxz.rent.model.PmsProduct">
+        select * from pms_product p
+        left join cms_subject_product_relation pr on p.id = pr.product_id
+        where p.delete_status = 0 and pr.subject_id = #{id} limit 0,3
+    </select>
+
+    <select id="getRecommendSubjectList" resultMap="subjectResultMap">
         SELECT s.*
-        FROM
-            sms_home_recommend_subject hs
-            LEFT JOIN cms_subject s ON hs.subject_id = s.id
-        WHERE
-            hs.recommend_status = 1
-            AND s.show_status = 1
+        FROM cms_subject s
+        WHERE s.show_status = 1
         ORDER BY
-            hs.sort DESC
+            s.sort DESC
+        LIMIT #{offset}, #{limit}
+    </select>
+
+
+
+    <select id="getActivityList" resultType="com.xxz.rent.model.SmsHomeActivity">
+        select *
+        from sms_home_activity
+        where delete_status = 1 order by sort desc
+    </select>
+
+    <select id="getGoodUsedProductList" resultType="com.xxz.rent.model.PmsProduct">
+         SELECT p.*
+        FROM
+            sms_home_recommend_used_product hp
+            LEFT JOIN pms_product p ON hp.product_id = p.id
+        WHERE
+            hp.recommend_status = 1
+            AND p.publish_status = 1
+        ORDER BY
+            hp.sort DESC
         LIMIT #{offset}, #{limit};
     </select>
+
+    <select id="getPorductListBySubjectId" resultType="com.xxz.rent.model.PmsProduct">
+        select * from pms_product
+        where id in (select product_id from cms_subject_product_relation where subject_id = #{id})
+    </select>
+
 </mapper>

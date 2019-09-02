@@ -7,6 +7,7 @@ import com.xxz.rent.model.*;
 import com.xxz.rent.portal.dao.SmsCouponHistoryDao;
 import com.xxz.rent.portal.model.dto.CartPromotionItem;
 import com.xxz.rent.portal.model.dto.SmsCouponHistoryDetail;
+import com.xxz.rent.portal.model.dto.SmsCouponHistoryResult;
 import com.xxz.rent.portal.service.UmsMemberCouponService;
 import com.xxz.rent.portal.service.UmsMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,13 +42,13 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
             return CommonResult.failed("优惠券已经领完了");
         }
         Date now = new Date();
-        if(now.before(coupon.getEnableTime())){
+        if(now.before(coupon.getEnableTime()) || coupon.getEnableTime() == null){
             return CommonResult.failed("优惠券还没到领取时间");
         }
         //判断用户领取的优惠券数量是否超过限制
         SmsCouponHistoryExample couponHistoryExample = new SmsCouponHistoryExample();
         couponHistoryExample.createCriteria().andCouponIdEqualTo(couponId).andMemberIdEqualTo(currentMember.getId());
-        int count = couponHistoryMapper.countByExample(couponHistoryExample);
+        long count = couponHistoryMapper.countByExample(couponHistoryExample);
         if(count>=coupon.getPerLimit()){
             return CommonResult.failed("您已经领取过该优惠券");
         }
@@ -91,15 +92,16 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
     }
 
     @Override
-    public List<SmsCouponHistory> list(Integer useStatus) {
+    public List<SmsCouponHistoryResult> list(Integer useStatus) {
         UmsMember currentMember = memberService.getCurrentMember();
-        SmsCouponHistoryExample couponHistoryExample=new SmsCouponHistoryExample();
-        SmsCouponHistoryExample.Criteria criteria = couponHistoryExample.createCriteria();
-        criteria.andMemberIdEqualTo(currentMember.getId());
-        if(useStatus!=null){
-            criteria.andUseStatusEqualTo(useStatus);
-        }
-        return couponHistoryMapper.selectByExample(couponHistoryExample);
+        List<SmsCouponHistoryResult> couponHistoryResultList = couponHistoryDao.list(currentMember.getId(), useStatus);
+//        SmsCouponHistoryExample couponHistoryExample=new SmsCouponHistoryExample();
+//        SmsCouponHistoryExample.Criteria criteria = couponHistoryExample.createCriteria();
+//        criteria.andMemberIdEqualTo(currentMember.getId());
+//        if(useStatus!=null){
+//            criteria.andUseStatusEqualTo(useStatus);
+//        }
+        return couponHistoryResultList;
     }
 
     @Override
@@ -163,8 +165,8 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
     private BigDecimal calcTotalAmount(List<CartPromotionItem> cartItemList) {
         BigDecimal total = new BigDecimal("0");
         for (CartPromotionItem item : cartItemList) {
-            BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
-            total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
+//            BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
+//            total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
         }
         return total;
     }
@@ -173,8 +175,8 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
         BigDecimal total = new BigDecimal("0");
         for (CartPromotionItem item : cartItemList) {
             if(productCategoryIds.contains(item.getProductCategoryId())){
-                BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
-                total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
+//                BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
+//                total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
             }
         }
         return total;
@@ -184,8 +186,8 @@ public class UmsMemberCouponServiceImpl implements UmsMemberCouponService {
         BigDecimal total = new BigDecimal("0");
         for (CartPromotionItem item : cartItemList) {
             if(productIds.contains(item.getProductId())){
-                BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
-                total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
+//                BigDecimal realPrice = item.getPrice().subtract(item.getReduceAmount());
+//                total=total.add(realPrice.multiply(new BigDecimal(item.getQuantity())));
             }
         }
         return total;

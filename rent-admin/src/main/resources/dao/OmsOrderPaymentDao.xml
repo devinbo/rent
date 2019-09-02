@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.dao.OmsOrderPaymentDao">
+    <insert id="insertList">
+        insert into oms_order_payment (order_id, status, pay_money, real_pay_money,
+        base_money, preferential_money, pay_time, real_pay_time, idex)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.orderId}, #{item.status}, #{item.payMoney}, #{item.realPayMoney},
+            #{item.baseMoney}, #{item.preferentialMoney}, #{item.payTime},
+            #{item.realPayTime}, #{item.idex})
+        </foreach>
+    </insert>
+
+    <select id="getNextPayment" resultType="com.xxz.rent.model.OmsOrderPayment">
+        select * from oms_order_payment where id - 1 = #{id} and
+        order_id = (select order_id from oms_order_payment where id = #{id})
+    </select>
+</mapper>

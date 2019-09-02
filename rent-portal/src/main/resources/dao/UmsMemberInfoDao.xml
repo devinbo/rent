@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.UmsMemberInfoDao">
+
+    <resultMap id="MemberResultMap" type="com.xxz.rent.portal.model.dto.MemberResult" extends="com.xxz.rent.mapper.UmsMemberMapper.BaseResultMap">
+        <association property="memberKinsfolk" select="getKinsfolk" column="id"/>
+        <association property="memberLink" select="getLink" column="id"/>
+        <association property="memberRealinform" select="getRealinform" column="id"/>
+        <association property="memberAuthRelation" select="getAuthRelation" column="id"/>
+    </resultMap>
+
+    <select id="getAuthRelation" resultType="com.xxz.rent.model.UmsMemberAuthRelation">
+        select * from ums_member_auth_relation where member_id = #{id} limit 1
+    </select>
+    <select id="getKinsfolk" resultType="com.xxz.rent.model.UmsMemberKinsfolk">
+        select * from ums_member_kinsfolk where member_id = #{id} limit 1
+    </select>
+    <select id="getLink" resultType="com.xxz.rent.model.UmsMemberLink">
+        select * from ums_member_link where member_id = #{id} limit 1
+    </select>
+    <select id="getRealinform" resultType="com.xxz.rent.model.UmsMemberRealinform">
+        select * from ums_member_realinform where member_id = #{id} limit 1
+    </select>
+
+    <select id="getAllInfo" resultMap="MemberResultMap" >
+        select * from ums_member where id = #{id}
+    </select>
+</mapper>
