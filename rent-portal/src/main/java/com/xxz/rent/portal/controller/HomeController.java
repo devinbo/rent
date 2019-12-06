@@ -47,19 +47,19 @@ public class HomeController {
     @ApiOperation(value = "分页获取热门排行商品", notes = "默认每页大小为4")
     @RequestMapping(value = "/recommendProductList", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<List<PmsProduct>> recommendProductList(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+    public CommonResult<CommonPage<PmsProduct>> recommendProductList(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
         List<PmsProduct> productList = homeService.recommendProductList(pageSize, pageNum);
-        return CommonResult.success(productList);
+        return CommonResult.success(CommonPage.restPage(productList));
     }
 
     @ApiOperation(value = "分页获取二手优选商品", notes = "默认每页大小为5")
     @RequestMapping(value = "/goodUsedProductList", method = RequestMethod.GET)
     @ResponseBody
-    public CommonResult<List<PmsProduct>> goodUsedProductList(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
+    public CommonResult<CommonPage<PmsProduct>> goodUsedProductList(@RequestParam(value = "pageSize", defaultValue = "5") Integer pageSize,
                                                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
-        List<PmsProduct> productList = homeService.goodUsedProductList(pageSize, pageNum);
-        return CommonResult.success(productList);
+        List<PmsProduct> productList = homeService.goodUsedProductList(pageNum, pageSize);
+        return CommonResult.success(CommonPage.restPage(productList));
     }
 
     @ApiOperation(value = "获取首页商品分类", notes = "目前仅涉及一级分类")

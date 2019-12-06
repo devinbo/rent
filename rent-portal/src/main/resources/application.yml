@@ -5,7 +5,13 @@ spring:
     multipart:
       max-file-size: 150MB
       max-request-size: 150MB
-
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/static/
 
 mybatis:
   configuration:
@@ -15,7 +21,7 @@ mybatis:
     - classpath*:com/**/mapper/*.xml
 
 http:
-  port: 8085 # http服务端口
+  port: 8085 # http服务端
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
@@ -57,6 +63,7 @@ alicloud:
   prBasic: 91xiaoxiangzu
   accessKeyId: LTAIdF00HsZdZi3k
   accessKeySecret: NBb4yxDYb5El4vMyRkGxIlWv0crwvA
+
 
 
 logging:

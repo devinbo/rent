@@ -1,5 +1,6 @@
 package com.xxz.rent.portal.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.github.pagehelper.PageHelper;
 import com.xxz.rent.mapper.*;
 import com.xxz.rent.model.*;
@@ -12,6 +13,8 @@ import com.xxz.rent.portal.model.dto.HomeFlashPromotion;
 import com.xxz.rent.portal.model.dto.PmsProductResult;
 import com.xxz.rent.portal.model.dto.SkuProps;
 import com.xxz.rent.portal.service.HomeService;
+import com.xxz.rent.portal.service.RedisService;
+import com.xxz.rent.portal.service.UmsMemberService;
 import com.xxz.rent.portal.util.DateUtil;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang.StringUtils;
@@ -53,9 +56,22 @@ public class HomeServiceImpl implements HomeService {
     private PmsProductAttributeMapper productAttributeMapper;
     @Autowired
     private PmsProductAttributeValueMapper productAttributeValueMapper;
+    @Autowired
+    private RedisService redisService;
+    @Autowired
+    private UmsMemberService memberService;
+    @Autowired
+    private UmsMemberBrewosProductMapper brewosProductMapper;
+
+
+    private final String HOME_KEY = "portal:home";
 
     @Override
     public HomeContentResult content() {
+        Object obj = redisService.getObj(HOME_KEY);
+        if(obj != null) {
+            return (HomeContentResult) obj;
+        }
         HomeContentResult result = new HomeContentResult();
         //获取首页广告
         result.setAdvertiseList(getHomeAdvertiseList());
@@ -69,6 +85,8 @@ public class HomeServiceImpl implements HomeService {
         result.setGoodUsedProductList(homeDao.getGoodUsedProductList(0, 4));
         //获取推荐专题
         result.setSubjectList(homeDao.getRecommendSubjectList(0,6));
+        //保存到redis中30分钟
+        redisService.setObj(HOME_KEY, result, 30 * 60);
         return result;
     }
 
@@ -76,7 +94,8 @@ public class HomeServiceImpl implements HomeService {
         PmsProductCategoryExample example = new PmsProductCategoryExample();
         example.createCriteria().andShowStatusEqualTo(1).andNavStatusEqualTo(1).andLevelEqualTo(0);
         example.setOrderByClause("sort desc");
-        return productCategoryMapper.selectByExample(example);
+        List<PmsProductCategory> list = productCategoryMapper.selectByExample(example);
+        return new ArrayList<>(CollectionUtil.sub(list, 0, 6));
     }
 
     @Override
@@ -92,7 +111,9 @@ public class HomeServiceImpl implements HomeService {
                 .andShowStatusEqualTo(1)
                 .andParentIdEqualTo(parentId);
         example.setOrderByClause("sort desc");
-        return productCategoryMapper.selectByExample(example);
+        List<PmsProductCategory> list = productCategoryMapper.selectByExample(example);
+        //首页图标控制最多显示6个
+        return CollectionUtil.sub(list, 0, 6);
     }
 
     @Override
@@ -142,11 +163,13 @@ public class HomeServiceImpl implements HomeService {
                 PmsProductAttributeValueExample valueExample = new PmsProductAttributeValueExample();
                 valueExample.createCriteria().andProductAttributeIdEqualTo(attribute.getId()).andProductIdEqualTo(id);
                 List<PmsProductAttributeValue> attributeValues = productAttributeValueMapper.selectByExample(valueExample);
-                //创建SKUProps
-                SkuProps skuProps = new SkuProps();
-                skuProps.setName(attribute.getName());
-                skuProps.setValue(attributeValues.get(0).getValue());
-                skuPropsList.add(skuProps);
+                if(attributeValues.size() > 0) {
+                    //创建SKUProps
+                    SkuProps skuProps = new SkuProps();
+                    skuProps.setName(attribute.getName());
+                    skuProps.setValue(attributeValues.get(0).getValue());
+                    skuPropsList.add(skuProps);
+                }
             }else{
                 //选中的属性
                 SkuProps skuProps = getEditAttrValue(productResult.getPmsSkuStockList(), attribute, i);
@@ -156,7 +179,27 @@ public class HomeServiceImpl implements HomeService {
             }
         }
         productResult.setSkuPropsList(skuPropsList);
+
+        //加入浏览记录
+        if(memberService.getCurrentMember() != null) {
+            brewosProduct(id, memberService.getCurrentMember().getId());
+        }
         return productResult;
+    }
+
+    /**
+     * 插入浏览记录
+     * @param productId
+     * @param memberId
+     */
+    private void brewosProduct(Long productId, Long memberId) {
+        UmsMemberBrewosProduct brewosProduct = new UmsMemberBrewosProduct();
+        brewosProduct.setMemberId(memberId);
+        brewosProduct.setProductId(productId);
+        brewosProduct.setType(1);
+        brewosProduct.setCreateTime(new Date());
+        brewosProduct.setCreateDate(cn.hutool.core.date.DateUtil.formatDate(new Date()));
+        brewosProductMapper.insertSelective(brewosProduct);
     }
 
     private SkuProps getEditAttrValue(List<PmsSkuStock> skuStockList, PmsProductAttribute attribute, int index) {

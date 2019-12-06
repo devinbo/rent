@@ -14,17 +14,16 @@ import com.xxz.rent.mapper.OtoProductMapper;
 import com.xxz.rent.mapper.OtoSiteMapper;
 import com.xxz.rent.model.*;
 import com.xxz.rent.portal.bo.exception.BusinessLogicException;
+import com.xxz.rent.portal.model.dto.OtoOrderPaymentResult;
 import com.xxz.rent.portal.model.dto.PublishDetailResult;
 import com.xxz.rent.portal.model.dto.PublishProgress;
 import com.xxz.rent.portal.service.OtoPublishService;
 import com.xxz.rent.portal.service.UmsMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author ：xhb
@@ -44,6 +43,8 @@ public class OtoPublishServiceImpl implements OtoPublishService {
     private OtoOrderMapper otoOrderMapper;
     @Autowired
     private OtoOrderPaymentMapper otoOrderPaymentMapper;
+    @Autowired
+    private OtoProductMapper otoProductMapper;
 
     @Autowired
     private UmsMemberService memberService;
@@ -108,9 +109,10 @@ public class OtoPublishServiceImpl implements OtoPublishService {
     @Override
     public PublishDetailResult detail(Long id) {
         PublishDetailResult result = new PublishDetailResult();
-        OtoOrder otoOrder = otoOrderMapper.selectByPrimaryKey(id);
-
-        OtoProduct otoProduct = productMapper.selectByPrimaryKey(otoOrder.getProductId());
+//        OtoOrder otoOrder = otoOrderMapper.selectByPrimaryKey(id);
+//        Assert.notNull(otoOrder, "无效ID");
+        OtoProduct otoProduct = productMapper.selectByPrimaryKey(id);
+        Assert.notNull(otoProduct, "无效ID");
         BeanUtil.copyProperties(otoProduct, result);
 
         result.setMinRentNum(otoProduct.getRentLeastNum());
@@ -128,6 +130,7 @@ public class OtoPublishServiceImpl implements OtoPublishService {
         List<PublishProgress> publishProgressList = new ArrayList<>();
         //申请
         PublishProgress progress1 = new PublishProgress();
+        progress1.setCompleted(true);
         progress1.setName("申请发布");
         progress1.setTime(otoProduct.getCreateTime());
         publishProgressList.add(progress1);
@@ -141,13 +144,13 @@ public class OtoPublishServiceImpl implements OtoPublishService {
                 progress2.setName("审核通过");
             }
             progress2.setTime(otoProduct.getAuditTime());
-            publishProgressList.add(progress2);
+            progress2.setCompleted(true);
         } else {
+            progress2.setCompleted(false);
             progress2.setName("待审核");
             progress2.setTime(otoProduct.getAuditTime());
-            publishProgressList.add(progress2);
-            return publishProgressList;
         }
+        publishProgressList.add(progress2);
 
         PublishProgress progress3 = new PublishProgress();
         //判断是否进行待邮寄处理
@@ -156,15 +159,43 @@ public class OtoPublishServiceImpl implements OtoPublishService {
             //说明尚未邮寄
             progress3.setName("待邮寄");
             progress3.setNote("请待要上架产品邮寄至以下代理点");
+            progress3.setCompleted(false);
             progress3.setLocation(otoSite != null ? otoSite.getLatitude() + "," + otoSite.getLongitude() : "");
         }else{
             OtoSite otoSite = getLocation(otoProduct.getSiteId());
-            //说明尚未邮寄
+            //说明已经邮寄
             progress3.setName("已邮寄");
             progress3.setNote("已将产品送至代理点：" + otoSite.getDetailAddress());
+            progress3.setCompleted(true);
             progress3.setLocation(otoSite.getLatitude() + "," + otoSite.getLongitude());
         }
+        publishProgressList.add(progress3);
+
+        //判断是否上架
+        PublishProgress progress4 = new PublishProgress();
+        if(isCompletePublish(otoProduct.getStatus())) {
+            progress4.setName("已上架");
+            progress4.setTime(otoProduct.getPublishTime());
+            progress4.setCompleted(true);
+        }else{
+            progress4.setName("待上架");
+            progress4.setCompleted(false);
+        }
+        publishProgressList.add(progress4);
+
         return publishProgressList;
+    }
+
+    /**
+     * 是否完成上架
+     * @param status
+     * @return
+     */
+    private boolean isCompletePublish(Integer status) {
+        return Objects.equals(status, OtoProductStatus.PUBLISH.getStatus())
+                || Objects.equals(status, OtoProductStatus.AWAITSIGN.getStatus())
+                || Objects.equals(status, OtoProductStatus.SIGNING.getStatus())
+                || Objects.equals(status, OtoProductStatus.COMPLETE.getStatus());
     }
 
     //获取位置
@@ -172,7 +203,7 @@ public class OtoPublishServiceImpl implements OtoPublishService {
         OtoSiteExample example = new OtoSiteExample();
         OtoSiteExample.Criteria criteria = example.createCriteria();
         criteria.andDeleteStatusEqualTo(0);
-        if(siteId == null) {
+        if(siteId != null) {
             criteria.andIdEqualTo(siteId);
         }
 
@@ -241,10 +272,31 @@ public class OtoPublishServiceImpl implements OtoPublishService {
     }
 
     @Override
-    public List<OtoOrderPayment> rentDetail(Long id) {
+    public OtoOrderPaymentResult rentDetail(Long id) {
         OtoOrderPaymentExample example = new OtoOrderPaymentExample();
         example.createCriteria().andOrderIdEqualTo(id);
-        return otoOrderPaymentMapper.selectByExample(example);
+        List<OtoOrderPayment> otoOrderPaymentList = otoOrderPaymentMapper.selectByExample(example);
+        if(otoOrderPaymentList == null || otoOrderPaymentList.size() == 0) {
+            throw new BusinessLogicException("无效ID或非签约订单");
+        }
+        //进行排序操作， 按照 1 逾期 -> 0 待支付 -> 3 尚未开始 -> 2 已支付
+        //定义一个排列规则
+        List<Integer> regulation = Arrays.asList(new Integer[]{1, 0, 3, 2});
+        Collections.sort(otoOrderPaymentList, new Comparator<OtoOrderPayment>() {
+            @Override
+            public int compare(OtoOrderPayment o1, OtoOrderPayment o2) {
+                return regulation.indexOf(o1.getStatus()) - regulation.indexOf(o2.getStatus());
+            }
+        });
+
+        OtoOrder otoOrder = otoOrderMapper.selectByPrimaryKey(id);
+        OtoOrderPaymentResult result = new OtoOrderPaymentResult();
+        BeanUtil.copyProperties(otoOrder, result);
+        result.setOtoOrderPaymentList(otoOrderPaymentList);
+
+        OtoProduct otoProduct = otoProductMapper.selectByPrimaryKey(otoOrder.getProductId());
+        result.setPic(otoProduct.getPic());
+        return result;
     }
 
 }

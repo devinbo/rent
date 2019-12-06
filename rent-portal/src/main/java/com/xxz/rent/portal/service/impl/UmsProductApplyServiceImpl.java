@@ -154,7 +154,8 @@ public class UmsProductApplyServiceImpl implements UmsProductApplyService {
             throw new BusinessLogicException("产品已失效！");
         }else if(1 == pmsProduct.getNoticeStatus()) {
             throw new BusinessLogicException("该产品为预告产品，无法申请!");
-        }else if(PromotionStatus.FREECHARGE.getStatus().equals(pmsProduct.getPromotionType())) {
+        }else if(PromotionStatus.FREECHARGE.getStatus().equals(pmsProduct.getPromotionType())
+            && 1 == pmsProduct.getReapplyState()) {
             //如果该产品是免押金的，那么查看是否已经有该产品了
             if(orderDao.countBySameProduct(pmsProduct.getId())) {
                 throw new BusinessLogicException("您已经申请过该产品，请先完成之前的订单");

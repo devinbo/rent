@@ -25,5 +25,7 @@ public class PublishProgress {
     private String note;
     @ApiModelProperty("经纬度，仅针对于代理点才有")
     private String location;
+    @ApiModelProperty("是否已经完成")
+    private boolean isCompleted;
 
 }

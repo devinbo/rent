@@ -3,6 +3,7 @@ package com.xxz.rent.portal.model.dto;
 import com.xxz.rent.model.*;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,8 +15,7 @@ import java.util.List;
  * @author xxz
  * @date 2019/1/28
  */
-@Getter
-@Setter
+@Data
 public class HomeContentResult {
 
     @ApiModelProperty("轮播广告")

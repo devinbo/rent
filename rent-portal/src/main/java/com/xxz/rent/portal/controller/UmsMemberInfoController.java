@@ -69,11 +69,8 @@ public class UmsMemberInfoController {
     @ApiOperation(value = "上传用户头像")
     @PostMapping("/upload/head-icon")
     public CommonResult uploadHeadIcon(@RequestPart(value = "file", required = true) MultipartFile file) throws IOException {
-        int count = memberInfoService.uploadHeadIcon(file);
-        if(count > 0) {
-            return CommonResult.success();
-        }
-        return CommonResult.failed();
+        String url = memberInfoService.uploadHeadIcon(file);
+        return CommonResult.success(url);
     }
 
     @ApiOperation(value = "修改用户昵称")
@@ -85,4 +82,16 @@ public class UmsMemberInfoController {
         }
         return CommonResult.failed();
     }
+
+    @ApiOperation(value = "修改用户基本信息")
+    @PostMapping("/update")
+    public CommonResult update(@RequestParam String nick) {
+        int count = memberInfoService.updateNick(nick);
+        if(count > 0) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+
 }

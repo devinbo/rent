@@ -93,12 +93,13 @@ public class UmsMemberInfoServiceImpl implements UmsMemberInfoService {
     }
 
     @Override
-    public int uploadHeadIcon(MultipartFile file) throws IOException {
+    public String uploadHeadIcon(MultipartFile file) throws IOException {
         String url = ossService.uploadWithFile(file);
         UmsMember member = memberService.getCurrentMember();
         member.setIcon(url);
         //保存用户信息
-        return memberMapper.updateByPrimaryKeySelective(member);
+        memberMapper.updateByPrimaryKeySelective(member);
+        return url;
     }
 
     @Override

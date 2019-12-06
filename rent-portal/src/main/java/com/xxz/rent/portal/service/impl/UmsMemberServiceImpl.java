@@ -61,6 +61,8 @@ public class UmsMemberServiceImpl implements UmsMemberService {
     private UmsMemberSettingMapper memberSettingMapper;
     @Autowired
     private UmsMemberIntegralMapper memberIntegralMapper;
+    @Autowired
+    private UmsMemberService umsMemberService;
 
     @Value("${redis.key.prefix.memberTelephone}")
     private String redisKeyMemberTelephone;
@@ -322,6 +324,10 @@ public class UmsMemberServiceImpl implements UmsMemberService {
             //初始化认证项信息
             createMemberAuthItem(memberId);
         }
+        //绑定当前微信信息
+        bindWxUserInfo(phoneParam.getTelephone(), phoneParam.getOpenid());
+
+
         //进行登陆操作
         MemberDetails memberDetails = smsMemberService.getUser(phoneParam.getTelephone());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberDetails, null, memberDetails.getAuthorities());
@@ -337,19 +343,20 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         return CommonResult.success(result);
     }
 
-    private Long createWxMember(String telePhone, Integer source, String openid) {
-        WxUserInfo wxUserInfo = (WxUserInfo) redisService.getObj(openid);
-        if (wxUserInfo == null) {
+    private void bindWxUserInfo(String telephone, String openid) {
+        Object obj = redisService.getObj(openid);
+        if (obj == null) {
             throw new BusinessLogicException("微信授权已过期，请重新授权！");
         }
-        //没有该用户进行添加操作
-        UmsMember umsMember = new UmsMember();
-        umsMember.setPhone(telePhone);
-        umsMember.setStatus(1);
-        //设置默认昵称
+        WxUserInfo wxUserInfo = (WxUserInfo) obj;
+        UmsMemberExample example = new UmsMemberExample();
+        example.createCriteria().andPhoneEqualTo(telephone);
+        List<UmsMember> umsMemberList = memberMapper.selectByExample(example);
+        UmsMember umsMember = umsMemberList.get(0);
+        if(0 == umsMember.getStatus()) {
+            throw new BusinessLogicException("该账号已被禁用，请更换手机号");
+        }
         umsMember.setNickname(wxUserInfo.getNickname());
-        umsMember.setSourceType(source);
-        umsMember.setIcon(headIcon);
         umsMember.setGender(Integer.valueOf(wxUserInfo.getSex()));
 
         //设置微信信息
@@ -359,6 +366,21 @@ public class UmsMemberServiceImpl implements UmsMemberService {
         umsMember.setCity(wxUserInfo.getCity());
         umsMember.setWechatCountry(wxUserInfo.getCountry());
         umsMember.setWechatProvince(wxUserInfo.getProvince());
+
+        memberMapper.updateByPrimaryKeySelective(umsMember);
+    }
+
+    private Long createWxMember(String telePhone, Integer source, String openid) {
+
+        //没有该用户进行添加操作
+        UmsMember umsMember = new UmsMember();
+        umsMember.setPhone(telePhone);
+        umsMember.setStatus(1);
+        //设置默认昵称
+        umsMember.setNickname(createDefaultNick(telePhone));
+        umsMember.setSourceType(source);
+        umsMember.setIcon(headIcon);
+
 
         //设置用户额度
         List<UmsMemberSetting> memberSettings = memberSettingMapper.selectByExample(new UmsMemberSettingExample());

@@ -67,7 +67,7 @@ public interface UmsMemberInfoService {
      * @return void
      * @date 2019-07-30 09:57
      */
-    int uploadHeadIcon(MultipartFile file) throws IOException;
+    String uploadHeadIcon(MultipartFile file) throws IOException;
 
     /**  功能描述 <br>
      * <修改用户资料信息>

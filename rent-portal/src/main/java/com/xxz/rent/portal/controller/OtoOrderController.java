@@ -7,7 +7,6 @@ import com.xxz.rent.portal.model.dto.OtoOrderParam;
 import com.xxz.rent.portal.service.OtoOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +33,6 @@ public class OtoOrderController {
     public CommonResult<OtoApplyResult> appay(@Valid @RequestBody OtoOrderParam otoOrderParam, BindingResult bindingResult) {
         return CommonResult.success(otoOrderService.apply(otoOrderParam));
     }
-
 
 
 }

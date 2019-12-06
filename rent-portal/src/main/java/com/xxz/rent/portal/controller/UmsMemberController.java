@@ -79,4 +79,5 @@ public class UmsMemberController {
         return memberService.bindPhone(phoneParam);
     }
 
+
 }

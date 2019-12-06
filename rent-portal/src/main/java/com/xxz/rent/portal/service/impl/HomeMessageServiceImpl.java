@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.xxz.rent.mapper.SmsMessageMapper;
 import com.xxz.rent.mapper.UmsMemberMessageMapper;
 import com.xxz.rent.model.*;
+import com.xxz.rent.portal.bo.exception.NoLoginException;
 import com.xxz.rent.portal.dao.SmsMessageDao;
 import com.xxz.rent.portal.service.HomeMessageService;
 import com.xxz.rent.portal.service.UmsMemberService;
@@ -62,6 +63,9 @@ public class HomeMessageServiceImpl implements HomeMessageService {
     public List<UmsMemberMessage> getMemberMessages(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         UmsMember umsMember = memberService.getCurrentMember();
+        if(umsMember == null) {
+            throw new NoLoginException("尚未登陆！");
+        }
         UmsMemberMessageExample example = new UmsMemberMessageExample();
         example.createCriteria().andMemberIdEqualTo(umsMember.getId());
         example.setOrderByClause("create_time desc");

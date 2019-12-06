@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.PmsBrowseDao">
+    
+    <resultMap id="selfBrowseList" type="com.xxz.rent.portal.model.dto.PmsBrowseResult">
+        <result property="browDate" column="create_date"/>
+        <collection property="pmsProductList" column="{cDate=create_date, id=member_id}" select="getBrowseProductList"/>
+    </resultMap>
+
+    <resultMap id="otoBrowseList" type="com.xxz.rent.portal.model.dto.OtoBrowseResult">
+        <result property="browDate" column="create_date"/>
+        <collection property="otoProductList" column="{cDate=create_date, id=member_id}" select="getOtoBrowseProductList"/>
+    </resultMap>
+
+    <select id="groupByBrowseList" resultMap="selfBrowseList">
+        select create_date, member_id from ums_member_brewos_product
+        where member_id = #{memberId} and type = 1
+        group by create_date order by create_date desc
+    </select>
+
+    <select id="getBrowseProductList" parameterType="java.util.Map" resultType="com.xxz.rent.model.PmsProduct">
+        select * from pms_product where id in
+        (select product_id from ums_member_brewos_product where type = 1 and member_id = #{id} and create_date = #{cDate}) limit 0, 9
+    </select>
+
+    <select id="getOtoBrowseProductList" parameterType="java.util.Map" resultType="com.xxz.rent.model.PmsProduct">
+        select * from pms_product where id in
+        (select product_id from ums_member_brewos_product where type = 2 and member_id = #{id} and create_date = #{cDate}) limit 0, 9
+    </select>
+
+    <select id="otoBrowseList" resultMap="otoBrowseList">
+        select create_date, member_id from ums_member_brewos_product where member_id = #{memberId} and type = 2
+        group by create_date order by create_date desc
+    </select>
+
+</mapper>

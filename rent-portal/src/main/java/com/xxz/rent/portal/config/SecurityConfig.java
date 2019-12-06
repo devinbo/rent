@@ -54,7 +54,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/sso/*",//登录注册
                         "/sso/*/*",//登录注册
                         "/payback/*", //支付回调
-                        "/home/**"//首页接口
+                        "/home/**",//首页接口
+                        "/bbs/**", //发现
+                        "/oto/category/list", //分类
+                        "/oto/product/list", //oto查询产品
+                        "/pms/category/*", //分类
+                        "/common/search/*", //搜索
+                        "/sys/*" //版本更新
                 )
                 .permitAll()
 //                .antMatchers("/member/**","/returnApply/**")// 测试时开启

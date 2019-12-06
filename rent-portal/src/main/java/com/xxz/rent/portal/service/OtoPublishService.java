@@ -3,6 +3,7 @@ package com.xxz.rent.portal.service;
 import com.xxz.rent.model.OtoOrderPayment;
 import com.xxz.rent.model.OtoProduct;
 import com.xxz.rent.model.OtoSite;
+import com.xxz.rent.portal.model.dto.OtoOrderPaymentResult;
 import com.xxz.rent.portal.model.dto.PublishDetailResult;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,5 +51,5 @@ public interface OtoPublishService {
 
     List<OtoSite> agencyList(String key, String city);
 
-    List<OtoOrderPayment> rentDetail(Long id);
+    OtoOrderPaymentResult rentDetail(Long id);
 }

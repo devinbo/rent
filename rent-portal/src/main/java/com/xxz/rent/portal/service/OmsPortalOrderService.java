@@ -23,4 +23,8 @@ public interface OmsPortalOrderService {
     OmsOrderResult getOrderDetail(Long id);
 
     List<OmsOrderPayment> getOrderBills(Long orderId);
+
+    int cancel(Long id);
+
+    int delete(Long id);
 }

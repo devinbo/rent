@@ -5,6 +5,7 @@ import com.xxz.rent.common.api.CommonResult;
 import com.xxz.rent.model.OtoOrderPayment;
 import com.xxz.rent.model.OtoProduct;
 import com.xxz.rent.model.OtoSite;
+import com.xxz.rent.portal.model.dto.OtoOrderPaymentResult;
 import com.xxz.rent.portal.model.dto.PublishDetailResult;
 import com.xxz.rent.portal.model.dto.PublishResult;
 import com.xxz.rent.portal.service.OtoPublishService;
@@ -33,8 +34,9 @@ public class OtoPublishController {
 
     @ApiOperation(value = "查询我的发布列表")
     @GetMapping("list")
-    public CommonResult<CommonPage<OtoProduct>> list(@ApiParam(value = "状态： 0->已签约；1->已上架；2->待审核") Integer status,
-                                                     @ApiParam(value = "当前页") int pageNum, @ApiParam(value = "每页大小") int pageSize) {
+    public CommonResult<CommonPage<OtoProduct>> list(@ApiParam(value = "状态： 0->已签约；1->已上架；2->待审核") @RequestParam(value = "status") Integer status,
+                                                     @ApiParam(value = "当前页") @RequestParam(value = "pageNum", defaultValue = "1") int pageNum,
+                                                     @ApiParam(value = "每页大小") @RequestParam(value = "pageSize", defaultValue = "10") int pageSize) {
         List<OtoProduct> otoProductList = otoPublishService.list(status, pageNum, pageSize);
         return CommonResult.success(CommonPage.restPage(otoProductList));
     }
@@ -77,8 +79,8 @@ public class OtoPublishController {
 
     @ApiOperation(value = "查看租金")
     @GetMapping("/rentDetail")
-    public CommonResult<List<OtoOrderPayment>> rentDetail(@ApiParam(value = "订单ID", required = true) @RequestParam Long id){
-        List<OtoOrderPayment> otoOrderPaymentList = otoPublishService.rentDetail(id);
-        return CommonResult.success(otoOrderPaymentList);
+    public CommonResult<OtoOrderPaymentResult> rentDetail(@ApiParam(value = "订单ID", required = true) @RequestParam Long id){
+        OtoOrderPaymentResult result = otoPublishService.rentDetail(id);
+        return CommonResult.success(result);
     }
 }

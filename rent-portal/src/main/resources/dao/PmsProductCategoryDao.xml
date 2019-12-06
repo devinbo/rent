@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xxz.rent.portal.dao.PmsProductCategoryDao">
+
+    <resultMap id="pmsCateAvdResult" type="com.xxz.rent.portal.model.dto.PmsCateAvdResult"
+               extends="com.xxz.rent.mapper.PmsProductCategoryMapper.BaseResultMap">
+        <association property="smsCateAdvertise" select="getCateAdvertise" column="id"/>
+    </resultMap>
+
+    <select id="list" resultMap="pmsCateAvdResult">
+        select * from pms_product_category where show_status = 1
+    </select>
+
+    <select id="getCateAdvertise" resultType="com.xxz.rent.model.SmsCateAdvertise">
+        select * from (
+            select *, 1 ord from sms_cate_advertise where cate_id = #{cateId}
+            union all
+            select *, 2 ord from sms_cate_advertise where default_status = 1 limit 1
+        ) c order by ord, create_time desc limit 1
+    </select>
+
+
+</mapper>

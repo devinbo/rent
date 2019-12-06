@@ -2,6 +2,7 @@ package com.xxz.rent.portal.component;
 
 import com.xxz.rent.common.api.CommonResult;
 import com.xxz.rent.portal.bo.exception.BusinessLogicException;
+import com.xxz.rent.portal.bo.exception.NoLoginException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -88,5 +89,13 @@ public class CommonExceptionHandler {
         return CommonResult.failed(e.getMessage());
     }
 
+    /**
+     * 处理未登陆异常
+     */
+    @ExceptionHandler
+    public @ResponseBody CommonResult noLoginExceptionHandler(NoLoginException e) {
+        log.error(e.getMessage(), e);
+        return CommonResult.unauthorized(e.getMessage());
+    }
 
 }

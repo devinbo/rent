@@ -231,4 +231,12 @@ public class BaseTest {
         System.out.println(Integer.valueOf(s));
     }
 
+    @Test
+    public void test10() {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        System.out.println(CollectionUtil.sub(list, 0, 5));
+    }
 }

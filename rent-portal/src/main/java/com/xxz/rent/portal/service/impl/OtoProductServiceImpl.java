@@ -3,6 +3,7 @@ package com.xxz.rent.portal.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.StrUtil;
 import com.github.pagehelper.PageHelper;
 import com.xxz.rent.dto.enumerate.OtoProductStatus;
 import com.xxz.rent.dto.enumerate.RentUnit;
@@ -17,6 +18,7 @@ import com.xxz.rent.portal.service.UmsMemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -52,10 +54,16 @@ public class OtoProductServiceImpl implements OtoProductService {
     private OtoProductCommentMapper otoProductCommentMapper;
     @Autowired
     private OtoProductReplyMapper otoProductReplyMapper;
+    @Autowired
+    private UmsMemberBrewosProductMapper brewosProductMapper;
 
 
     @Override
     public int add(MultipartFile[] pic, OtoProductParam productParam) {
+        //判断用户是否已经认证
+        UmsMember umsMember = memberService.getCurrentMemberByDb();
+        Assert.notNull(umsMember.getName(), "请先进行实名认证！");
+
         OtoProduct otoProduct = new OtoProduct();
         //判断最短起租数是否小于最迟归还的日期
         Integer unit = productParam.getRentUnit();
@@ -102,7 +110,10 @@ public class OtoProductServiceImpl implements OtoProductService {
         //设置首页图片， 首页图片为上传的第一个
         String firstPic = otoProduct.getAlbumPics().split(",")[0];
         otoProduct.setPic(firstPic);
-        otoProduct.setMemberId(memberService.getCurrentMember().getId());
+        otoProduct.setMemberId(umsMember.getId());
+        otoProduct.setMemberName(umsMember.getName());
+        otoProduct.setMemberNickname(umsMember.getNickname());
+        otoProduct.setMemberPhone(umsMember.getPhone());
         int count = productMapper.insertSelective(otoProduct);
 
         //todo 通知审核员
@@ -137,11 +148,23 @@ public class OtoProductServiceImpl implements OtoProductService {
         result.setCommentList(commentResultList);
 
         //添加浏览量
-        OtoProduct product = new OtoProduct();
-        product.setId(id);
-        product.setViewNum((otoProduct.getViewNum() == null ? 0 : otoProduct.getViewNum()) + 1);
-        productMapper.updateByPrimaryKeySelective(product);
+        addBrewosProduct(id, member.getId(), otoProduct.getViewNum());
         return result;
+    }
+
+    private void addBrewosProduct(Long productId, Long memberId, Integer viewNum) {
+        OtoProduct product = new OtoProduct();
+        product.setId(productId);
+        product.setViewNum((viewNum == null ? 0 : viewNum) + 1);
+        productMapper.updateByPrimaryKeySelective(product);
+
+        UmsMemberBrewosProduct brewosProduct = new UmsMemberBrewosProduct();
+        brewosProduct.setType(2);
+        brewosProduct.setMemberId(memberId);
+        brewosProduct.setProductId(productId);
+        brewosProduct.setCreateTime(new Date());
+        brewosProduct.setCreateDate(DateUtil.formatDate(new Date()));
+        brewosProductMapper.insertSelective(brewosProduct);
     }
 
     @Override

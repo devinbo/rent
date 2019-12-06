@@ -1,5 +1,6 @@
 package com.xxz.rent.portal.service;
 
+import com.xxz.rent.model.SysVersionOnline;
 import com.xxz.rent.portal.model.dto.AppVersion;
 import com.xxz.rent.portal.model.dto.AppVersionResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,4 +19,11 @@ public interface SysVersionService {
      * @date 2019-08-14 13:48
      */
     AppVersionResult checkUpdate(AppVersion appVersion);
+
+    /**
+     * 检查版本是否已经上线
+     * @param appVersion
+     * @return
+     */
+    SysVersionOnline online(AppVersion appVersion);
 }

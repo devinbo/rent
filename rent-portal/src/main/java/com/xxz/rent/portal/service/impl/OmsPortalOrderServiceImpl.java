@@ -3,8 +3,10 @@ package com.xxz.rent.portal.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.page.PageParams;
 import com.xxz.rent.common.api.CommonResult;
+import com.xxz.rent.dto.enumerate.OrderStatus;
 import com.xxz.rent.mapper.*;
 import com.xxz.rent.model.*;
+import com.xxz.rent.portal.bo.exception.BusinessLogicException;
 import com.xxz.rent.portal.component.CancelOrderSender;
 import com.xxz.rent.portal.dao.OmsOrderDao;
 import com.xxz.rent.portal.dao.PortalOrderDao;
@@ -16,6 +18,7 @@ import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
@@ -70,4 +73,28 @@ public class OmsPortalOrderServiceImpl implements OmsPortalOrderService {
         });
         return orderPaymentList;
     }
+
+    @Override
+    public int cancel(Long id) {
+        OmsOrder omsOrder = orderMapper.selectByPrimaryKey(id);
+        if(omsOrder == null) {
+            throw new BusinessLogicException("无效订单");
+        }
+        Assert.isTrue(omsOrder.getStatus() == OrderStatus.PAY.getStatus(), "该订单无法取消");
+        omsOrder.setStatus(OrderStatus.CANCEL.getStatus());
+        return orderMapper.updateByPrimaryKeySelective(omsOrder);
+    }
+
+    @Override
+    public int delete(Long id) {
+        OmsOrder omsOrder = orderMapper.selectByPrimaryKey(id);
+        if(omsOrder == null) {
+            throw new BusinessLogicException("无效订单");
+        }
+        Assert.isTrue(omsOrder.getStatus() == OrderStatus.CANCEL.getStatus(), "该订单无法删除");
+        omsOrder.setDeleteStatus(1);
+        return orderMapper.updateByPrimaryKeySelective(omsOrder);
+    }
+
+
 }

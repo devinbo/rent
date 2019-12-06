@@ -58,4 +58,23 @@ public class OmsPortalOrderController {
     }
 
 
+    @ApiOperation(value = "取消订单", notes = "只能取消待支付的订单")
+    @PostMapping("/cancel")
+    public CommonResult cancel(@RequestParam Long id) {
+        int count = portalOrderService.cancel(id);
+        if(count > 0) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
+
+    @ApiOperation(value = "删除订单")
+    @PostMapping("/delete")
+    public CommonResult delete(@RequestParam Long id) {
+        int count = portalOrderService.delete(id);
+        if(count > 0) {
+            return CommonResult.success();
+        }
+        return CommonResult.failed();
+    }
 }
