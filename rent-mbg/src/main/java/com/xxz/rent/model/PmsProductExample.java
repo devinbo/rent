@@ -796,6 +796,66 @@ public class PmsProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andReapplyStateIsNull() {
+            addCriterion("reapply_state is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateIsNotNull() {
+            addCriterion("reapply_state is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateEqualTo(Integer value) {
+            addCriterion("reapply_state =", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateNotEqualTo(Integer value) {
+            addCriterion("reapply_state <>", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateGreaterThan(Integer value) {
+            addCriterion("reapply_state >", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateGreaterThanOrEqualTo(Integer value) {
+            addCriterion("reapply_state >=", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateLessThan(Integer value) {
+            addCriterion("reapply_state <", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateLessThanOrEqualTo(Integer value) {
+            addCriterion("reapply_state <=", value, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateIn(List<Integer> values) {
+            addCriterion("reapply_state in", values, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateNotIn(List<Integer> values) {
+            addCriterion("reapply_state not in", values, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateBetween(Integer value1, Integer value2) {
+            addCriterion("reapply_state between", value1, value2, "reapplyState");
+            return (Criteria) this;
+        }
+
+        public Criteria andReapplyStateNotBetween(Integer value1, Integer value2) {
+            addCriterion("reapply_state not between", value1, value2, "reapplyState");
+            return (Criteria) this;
+        }
+
         public Criteria andSortIsNull() {
             addCriterion("sort is null");
             return (Criteria) this;

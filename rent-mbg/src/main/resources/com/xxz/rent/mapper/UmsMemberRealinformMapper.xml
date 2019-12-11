@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.mapper.UmsMemberRealinformMapper">
+  <resultMap id="BaseResultMap" type="com.xxz.rent.model.UmsMemberRealinform">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="identification_number" jdbcType="VARCHAR" property="identificationNumber" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="ethnic_group" jdbcType="VARCHAR" property="ethnicGroup" />
+    <result column="face_pic" jdbcType="VARCHAR" property="facePic" />
+    <result column="id_card_back_pic" jdbcType="VARCHAR" property="idCardBackPic" />
+    <result column="id_card_front_pic" jdbcType="VARCHAR" property="idCardFrontPic" />
+    <result column="id_card_expiry" jdbcType="VARCHAR" property="idCardExpiry" />
+    <result column="id_card_start_date" jdbcType="TIMESTAMP" property="idCardStartDate" />
+    <result column="current_address" jdbcType="VARCHAR" property="currentAddress" />
+    <result column="company_address" jdbcType="VARCHAR" property="companyAddress" />
+    <result column="bankcard_pic" jdbcType="VARCHAR" property="bankcardPic" />
+    <result column="zmf_video" jdbcType="VARCHAR" property="zmfVideo" />
+    <result column="staff_pic" jdbcType="VARCHAR" property="staffPic" />
+    <result column="school" jdbcType="VARCHAR" property="school" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="member_type" jdbcType="INTEGER" property="memberType" />
+    <result column="month_income" jdbcType="DECIMAL" property="monthIncome" />
+    <result column="month_consume" jdbcType="DECIMAL" property="monthConsume" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name, identification_number, sex, address, ethnic_group, face_pic, id_card_back_pic, 
+    id_card_front_pic, id_card_expiry, id_card_start_date, current_address, company_address, 
+    bankcard_pic, zmf_video, staff_pic, school, member_id, member_type, month_income, 
+    month_consume
+  </sql>
+  <select id="selectByExample" parameterType="com.xxz.rent.model.UmsMemberRealinformExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ums_member_realinform
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_member_realinform
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ums_member_realinform
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxz.rent.model.UmsMemberRealinformExample">
+    delete from ums_member_realinform
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxz.rent.model.UmsMemberRealinform">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_realinform (name, identification_number, sex, 
+      address, ethnic_group, face_pic, 
+      id_card_back_pic, id_card_front_pic, id_card_expiry, 
+      id_card_start_date, current_address, company_address, 
+      bankcard_pic, zmf_video, staff_pic, 
+      school, member_id, member_type, 
+      month_income, month_consume)
+    values (#{name,jdbcType=VARCHAR}, #{identificationNumber,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{address,jdbcType=VARCHAR}, #{ethnicGroup,jdbcType=VARCHAR}, #{facePic,jdbcType=VARCHAR}, 
+      #{idCardBackPic,jdbcType=VARCHAR}, #{idCardFrontPic,jdbcType=VARCHAR}, #{idCardExpiry,jdbcType=VARCHAR}, 
+      #{idCardStartDate,jdbcType=TIMESTAMP}, #{currentAddress,jdbcType=VARCHAR}, #{companyAddress,jdbcType=VARCHAR}, 
+      #{bankcardPic,jdbcType=VARCHAR}, #{zmfVideo,jdbcType=VARCHAR}, #{staffPic,jdbcType=VARCHAR}, 
+      #{school,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT}, #{memberType,jdbcType=INTEGER}, 
+      #{monthIncome,jdbcType=DECIMAL}, #{monthConsume,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxz.rent.model.UmsMemberRealinform">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_realinform
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        name,
+      </if>
+      <if test="identificationNumber != null">
+        identification_number,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="address != null">
+        address,
+      </if>
+      <if test="ethnicGroup != null">
+        ethnic_group,
+      </if>
+      <if test="facePic != null">
+        face_pic,
+      </if>
+      <if test="idCardBackPic != null">
+        id_card_back_pic,
+      </if>
+      <if test="idCardFrontPic != null">
+        id_card_front_pic,
+      </if>
+      <if test="idCardExpiry != null">
+        id_card_expiry,
+      </if>
+      <if test="idCardStartDate != null">
+        id_card_start_date,
+      </if>
+      <if test="currentAddress != null">
+        current_address,
+      </if>
+      <if test="companyAddress != null">
+        company_address,
+      </if>
+      <if test="bankcardPic != null">
+        bankcard_pic,
+      </if>
+      <if test="zmfVideo != null">
+        zmf_video,
+      </if>
+      <if test="staffPic != null">
+        staff_pic,
+      </if>
+      <if test="school != null">
+        school,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="memberType != null">
+        member_type,
+      </if>
+      <if test="monthIncome != null">
+        month_income,
+      </if>
+      <if test="monthConsume != null">
+        month_consume,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationNumber != null">
+        #{identificationNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicGroup != null">
+        #{ethnicGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="facePic != null">
+        #{facePic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardBackPic != null">
+        #{idCardBackPic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardFrontPic != null">
+        #{idCardFrontPic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardExpiry != null">
+        #{idCardExpiry,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardStartDate != null">
+        #{idCardStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentAddress != null">
+        #{currentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardPic != null">
+        #{bankcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="zmfVideo != null">
+        #{zmfVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="staffPic != null">
+        #{staffPic,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="memberType != null">
+        #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="monthIncome != null">
+        #{monthIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="monthConsume != null">
+        #{monthConsume,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxz.rent.model.UmsMemberRealinformExample" resultType="java.lang.Long">
+    select count(*) from ums_member_realinform
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ums_member_realinform
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.identificationNumber != null">
+        identification_number = #{record.identificationNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        sex = #{record.sex,jdbcType=INTEGER},
+      </if>
+      <if test="record.address != null">
+        address = #{record.address,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ethnicGroup != null">
+        ethnic_group = #{record.ethnicGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="record.facePic != null">
+        face_pic = #{record.facePic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardBackPic != null">
+        id_card_back_pic = #{record.idCardBackPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardFrontPic != null">
+        id_card_front_pic = #{record.idCardFrontPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardExpiry != null">
+        id_card_expiry = #{record.idCardExpiry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.idCardStartDate != null">
+        id_card_start_date = #{record.idCardStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.currentAddress != null">
+        current_address = #{record.currentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.companyAddress != null">
+        company_address = #{record.companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bankcardPic != null">
+        bankcard_pic = #{record.bankcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zmfVideo != null">
+        zmf_video = #{record.zmfVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.staffPic != null">
+        staff_pic = #{record.staffPic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.school != null">
+        school = #{record.school,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberType != null">
+        member_type = #{record.memberType,jdbcType=INTEGER},
+      </if>
+      <if test="record.monthIncome != null">
+        month_income = #{record.monthIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.monthConsume != null">
+        month_consume = #{record.monthConsume,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ums_member_realinform
+    set id = #{record.id,jdbcType=BIGINT},
+      name = #{record.name,jdbcType=VARCHAR},
+      identification_number = #{record.identificationNumber,jdbcType=VARCHAR},
+      sex = #{record.sex,jdbcType=INTEGER},
+      address = #{record.address,jdbcType=VARCHAR},
+      ethnic_group = #{record.ethnicGroup,jdbcType=VARCHAR},
+      face_pic = #{record.facePic,jdbcType=VARCHAR},
+      id_card_back_pic = #{record.idCardBackPic,jdbcType=VARCHAR},
+      id_card_front_pic = #{record.idCardFrontPic,jdbcType=VARCHAR},
+      id_card_expiry = #{record.idCardExpiry,jdbcType=VARCHAR},
+      id_card_start_date = #{record.idCardStartDate,jdbcType=TIMESTAMP},
+      current_address = #{record.currentAddress,jdbcType=VARCHAR},
+      company_address = #{record.companyAddress,jdbcType=VARCHAR},
+      bankcard_pic = #{record.bankcardPic,jdbcType=VARCHAR},
+      zmf_video = #{record.zmfVideo,jdbcType=VARCHAR},
+      staff_pic = #{record.staffPic,jdbcType=VARCHAR},
+      school = #{record.school,jdbcType=VARCHAR},
+      member_id = #{record.memberId,jdbcType=BIGINT},
+      member_type = #{record.memberType,jdbcType=INTEGER},
+      month_income = #{record.monthIncome,jdbcType=DECIMAL},
+      month_consume = #{record.monthConsume,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxz.rent.model.UmsMemberRealinform">
+    update ums_member_realinform
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="identificationNumber != null">
+        identification_number = #{identificationNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        sex = #{sex,jdbcType=INTEGER},
+      </if>
+      <if test="address != null">
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnicGroup != null">
+        ethnic_group = #{ethnicGroup,jdbcType=VARCHAR},
+      </if>
+      <if test="facePic != null">
+        face_pic = #{facePic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardBackPic != null">
+        id_card_back_pic = #{idCardBackPic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardFrontPic != null">
+        id_card_front_pic = #{idCardFrontPic,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardExpiry != null">
+        id_card_expiry = #{idCardExpiry,jdbcType=VARCHAR},
+      </if>
+      <if test="idCardStartDate != null">
+        id_card_start_date = #{idCardStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="currentAddress != null">
+        current_address = #{currentAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="companyAddress != null">
+        company_address = #{companyAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="bankcardPic != null">
+        bankcard_pic = #{bankcardPic,jdbcType=VARCHAR},
+      </if>
+      <if test="zmfVideo != null">
+        zmf_video = #{zmfVideo,jdbcType=VARCHAR},
+      </if>
+      <if test="staffPic != null">
+        staff_pic = #{staffPic,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null">
+        school = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="memberType != null">
+        member_type = #{memberType,jdbcType=INTEGER},
+      </if>
+      <if test="monthIncome != null">
+        month_income = #{monthIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="monthConsume != null">
+        month_consume = #{monthConsume,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxz.rent.model.UmsMemberRealinform">
+    update ums_member_realinform
+    set name = #{name,jdbcType=VARCHAR},
+      identification_number = #{identificationNumber,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      address = #{address,jdbcType=VARCHAR},
+      ethnic_group = #{ethnicGroup,jdbcType=VARCHAR},
+      face_pic = #{facePic,jdbcType=VARCHAR},
+      id_card_back_pic = #{idCardBackPic,jdbcType=VARCHAR},
+      id_card_front_pic = #{idCardFrontPic,jdbcType=VARCHAR},
+      id_card_expiry = #{idCardExpiry,jdbcType=VARCHAR},
+      id_card_start_date = #{idCardStartDate,jdbcType=TIMESTAMP},
+      current_address = #{currentAddress,jdbcType=VARCHAR},
+      company_address = #{companyAddress,jdbcType=VARCHAR},
+      bankcard_pic = #{bankcardPic,jdbcType=VARCHAR},
+      zmf_video = #{zmfVideo,jdbcType=VARCHAR},
+      staff_pic = #{staffPic,jdbcType=VARCHAR},
+      school = #{school,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=BIGINT},
+      member_type = #{memberType,jdbcType=INTEGER},
+      month_income = #{monthIncome,jdbcType=DECIMAL},
+      month_consume = #{monthConsume,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

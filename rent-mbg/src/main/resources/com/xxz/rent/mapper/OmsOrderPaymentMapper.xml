@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.mapper.OmsOrderPaymentMapper">
+  <resultMap id="BaseResultMap" type="com.xxz.rent.model.OmsOrderPayment">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="order_id" jdbcType="BIGINT" property="orderId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="pay_money" jdbcType="DECIMAL" property="payMoney" />
+    <result column="real_pay_money" jdbcType="DECIMAL" property="realPayMoney" />
+    <result column="base_money" jdbcType="DECIMAL" property="baseMoney" />
+    <result column="preferential_money" jdbcType="DECIMAL" property="preferentialMoney" />
+    <result column="pay_time" jdbcType="DATE" property="payTime" />
+    <result column="real_pay_time" jdbcType="TIMESTAMP" property="realPayTime" />
+    <result column="idex" jdbcType="INTEGER" property="idex" />
+    <result column="overdue_money" jdbcType="DECIMAL" property="overdueMoney" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, order_id, status, pay_money, real_pay_money, base_money, preferential_money, 
+    pay_time, real_pay_time, idex, overdue_money
+  </sql>
+  <select id="selectByExample" parameterType="com.xxz.rent.model.OmsOrderPaymentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oms_order_payment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oms_order_payment
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from oms_order_payment
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxz.rent.model.OmsOrderPaymentExample">
+    delete from oms_order_payment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxz.rent.model.OmsOrderPayment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oms_order_payment (order_id, status, pay_money, 
+      real_pay_money, base_money, preferential_money, 
+      pay_time, real_pay_time, idex, 
+      overdue_money)
+    values (#{orderId,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{payMoney,jdbcType=DECIMAL}, 
+      #{realPayMoney,jdbcType=DECIMAL}, #{baseMoney,jdbcType=DECIMAL}, #{preferentialMoney,jdbcType=DECIMAL}, 
+      #{payTime,jdbcType=DATE}, #{realPayTime,jdbcType=TIMESTAMP}, #{idex,jdbcType=INTEGER}, 
+      #{overdueMoney,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxz.rent.model.OmsOrderPayment">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oms_order_payment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="payMoney != null">
+        pay_money,
+      </if>
+      <if test="realPayMoney != null">
+        real_pay_money,
+      </if>
+      <if test="baseMoney != null">
+        base_money,
+      </if>
+      <if test="preferentialMoney != null">
+        preferential_money,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="realPayTime != null">
+        real_pay_time,
+      </if>
+      <if test="idex != null">
+        idex,
+      </if>
+      <if test="overdueMoney != null">
+        overdue_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null">
+        #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="realPayMoney != null">
+        #{realPayMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="baseMoney != null">
+        #{baseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="preferentialMoney != null">
+        #{preferentialMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=DATE},
+      </if>
+      <if test="realPayTime != null">
+        #{realPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idex != null">
+        #{idex,jdbcType=INTEGER},
+      </if>
+      <if test="overdueMoney != null">
+        #{overdueMoney,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxz.rent.model.OmsOrderPaymentExample" resultType="java.lang.Long">
+    select count(*) from oms_order_payment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oms_order_payment
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=BIGINT},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.payMoney != null">
+        pay_money = #{record.payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.realPayMoney != null">
+        real_pay_money = #{record.realPayMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.baseMoney != null">
+        base_money = #{record.baseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.preferentialMoney != null">
+        preferential_money = #{record.preferentialMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payTime != null">
+        pay_time = #{record.payTime,jdbcType=DATE},
+      </if>
+      <if test="record.realPayTime != null">
+        real_pay_time = #{record.realPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.idex != null">
+        idex = #{record.idex,jdbcType=INTEGER},
+      </if>
+      <if test="record.overdueMoney != null">
+        overdue_money = #{record.overdueMoney,jdbcType=DECIMAL},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oms_order_payment
+    set id = #{record.id,jdbcType=BIGINT},
+      order_id = #{record.orderId,jdbcType=BIGINT},
+      status = #{record.status,jdbcType=INTEGER},
+      pay_money = #{record.payMoney,jdbcType=DECIMAL},
+      real_pay_money = #{record.realPayMoney,jdbcType=DECIMAL},
+      base_money = #{record.baseMoney,jdbcType=DECIMAL},
+      preferential_money = #{record.preferentialMoney,jdbcType=DECIMAL},
+      pay_time = #{record.payTime,jdbcType=DATE},
+      real_pay_time = #{record.realPayTime,jdbcType=TIMESTAMP},
+      idex = #{record.idex,jdbcType=INTEGER},
+      overdue_money = #{record.overdueMoney,jdbcType=DECIMAL}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxz.rent.model.OmsOrderPayment">
+    update oms_order_payment
+    <set>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=BIGINT},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="payMoney != null">
+        pay_money = #{payMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="realPayMoney != null">
+        real_pay_money = #{realPayMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="baseMoney != null">
+        base_money = #{baseMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="preferentialMoney != null">
+        preferential_money = #{preferentialMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=DATE},
+      </if>
+      <if test="realPayTime != null">
+        real_pay_time = #{realPayTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="idex != null">
+        idex = #{idex,jdbcType=INTEGER},
+      </if>
+      <if test="overdueMoney != null">
+        overdue_money = #{overdueMoney,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxz.rent.model.OmsOrderPayment">
+    update oms_order_payment
+    set order_id = #{orderId,jdbcType=BIGINT},
+      status = #{status,jdbcType=INTEGER},
+      pay_money = #{payMoney,jdbcType=DECIMAL},
+      real_pay_money = #{realPayMoney,jdbcType=DECIMAL},
+      base_money = #{baseMoney,jdbcType=DECIMAL},
+      preferential_money = #{preferentialMoney,jdbcType=DECIMAL},
+      pay_time = #{payTime,jdbcType=DATE},
+      real_pay_time = #{realPayTime,jdbcType=TIMESTAMP},
+      idex = #{idex,jdbcType=INTEGER},
+      overdue_money = #{overdueMoney,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

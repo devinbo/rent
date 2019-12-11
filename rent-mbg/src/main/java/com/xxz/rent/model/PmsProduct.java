@@ -36,6 +36,9 @@ public class PmsProduct implements Serializable {
     @ApiModelProperty(value = "推荐状态；0->不推荐；1->推荐")
     private Integer recommandStatus;
 
+    @ApiModelProperty(value = "重复申请；0->可不重复申请；1->可重复申请")
+    private Integer reapplyState;
+
     @ApiModelProperty(value = "排序")
     private Integer sort;
 
@@ -197,6 +200,14 @@ public class PmsProduct implements Serializable {
 
     public void setRecommandStatus(Integer recommandStatus) {
         this.recommandStatus = recommandStatus;
+    }
+
+    public Integer getReapplyState() {
+        return reapplyState;
+    }
+
+    public void setReapplyState(Integer reapplyState) {
+        this.reapplyState = reapplyState;
     }
 
     public Integer getSort() {
@@ -416,6 +427,7 @@ public class PmsProduct implements Serializable {
         sb.append(", publishStatus=").append(publishStatus);
         sb.append(", newStatus=").append(newStatus);
         sb.append(", recommandStatus=").append(recommandStatus);
+        sb.append(", reapplyState=").append(reapplyState);
         sb.append(", sort=").append(sort);
         sb.append(", sign=").append(sign);
         sb.append(", price=").append(price);

@@ -1,0 +1,623 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.mapper.OtoProductMapper">
+  <resultMap id="BaseResultMap" type="com.xxz.rent.model.OtoProduct">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="category_id" jdbcType="BIGINT" property="categoryId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
+    <result column="tags" jdbcType="VARCHAR" property="tags" />
+    <result column="album_pics" jdbcType="VARCHAR" property="albumPics" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="rent_unit" jdbcType="INTEGER" property="rentUnit" />
+    <result column="rent_each_price" jdbcType="DECIMAL" property="rentEachPrice" />
+    <result column="rent_least_num" jdbcType="INTEGER" property="rentLeastNum" />
+    <result column="rent_latest_date" jdbcType="DATE" property="rentLatestDate" />
+    <result column="product_price" jdbcType="DECIMAL" property="productPrice" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="audit_time" jdbcType="TIMESTAMP" property="auditTime" />
+    <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="good_status" jdbcType="INTEGER" property="goodStatus" />
+    <result column="site_id" jdbcType="BIGINT" property="siteId" />
+    <result column="reliable_status" jdbcType="INTEGER" property="reliableStatus" />
+    <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
+    <result column="delete_status" jdbcType="INTEGER" property="deleteStatus" />
+    <result column="sort" jdbcType="INTEGER" property="sort" />
+    <result column="leave_num" jdbcType="INTEGER" property="leaveNum" />
+    <result column="view_num" jdbcType="INTEGER" property="viewNum" />
+    <result column="publish_site" jdbcType="VARCHAR" property="publishSite" />
+    <result column="member_phone" jdbcType="VARCHAR" property="memberPhone" />
+    <result column="member_name" jdbcType="VARCHAR" property="memberName" />
+    <result column="member_nickname" jdbcType="VARCHAR" property="memberNickname" />
+    <result column="site_name" jdbcType="VARCHAR" property="siteName" />
+    <result column="refuse_reason" jdbcType="VARCHAR" property="refuseReason" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, member_id, category_id, title, note, tags, album_pics, pic, rent_unit, rent_each_price, 
+    rent_least_num, rent_latest_date, product_price, create_time, audit_time, publish_time, 
+    status, good_status, site_id, reliable_status, category_name, delete_status, sort, 
+    leave_num, view_num, publish_site, member_phone, member_name, member_nickname, site_name, 
+    refuse_reason
+  </sql>
+  <select id="selectByExample" parameterType="com.xxz.rent.model.OtoProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from oto_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from oto_product
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from oto_product
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxz.rent.model.OtoProductExample">
+    delete from oto_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxz.rent.model.OtoProduct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oto_product (member_id, category_id, title, 
+      note, tags, album_pics, 
+      pic, rent_unit, rent_each_price, 
+      rent_least_num, rent_latest_date, product_price, 
+      create_time, audit_time, publish_time, 
+      status, good_status, site_id, 
+      reliable_status, category_name, delete_status, 
+      sort, leave_num, view_num, 
+      publish_site, member_phone, member_name, 
+      member_nickname, site_name, refuse_reason
+      )
+    values (#{memberId,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, 
+      #{note,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, #{albumPics,jdbcType=VARCHAR}, 
+      #{pic,jdbcType=VARCHAR}, #{rentUnit,jdbcType=INTEGER}, #{rentEachPrice,jdbcType=DECIMAL}, 
+      #{rentLeastNum,jdbcType=INTEGER}, #{rentLatestDate,jdbcType=DATE}, #{productPrice,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{auditTime,jdbcType=TIMESTAMP}, #{publishTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=INTEGER}, #{goodStatus,jdbcType=INTEGER}, #{siteId,jdbcType=BIGINT}, 
+      #{reliableStatus,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, #{deleteStatus,jdbcType=INTEGER}, 
+      #{sort,jdbcType=INTEGER}, #{leaveNum,jdbcType=INTEGER}, #{viewNum,jdbcType=INTEGER}, 
+      #{publishSite,jdbcType=VARCHAR}, #{memberPhone,jdbcType=VARCHAR}, #{memberName,jdbcType=VARCHAR}, 
+      #{memberNickname,jdbcType=VARCHAR}, #{siteName,jdbcType=VARCHAR}, #{refuseReason,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxz.rent.model.OtoProduct">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into oto_product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="categoryId != null">
+        category_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="note != null">
+        note,
+      </if>
+      <if test="tags != null">
+        tags,
+      </if>
+      <if test="albumPics != null">
+        album_pics,
+      </if>
+      <if test="pic != null">
+        pic,
+      </if>
+      <if test="rentUnit != null">
+        rent_unit,
+      </if>
+      <if test="rentEachPrice != null">
+        rent_each_price,
+      </if>
+      <if test="rentLeastNum != null">
+        rent_least_num,
+      </if>
+      <if test="rentLatestDate != null">
+        rent_latest_date,
+      </if>
+      <if test="productPrice != null">
+        product_price,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="auditTime != null">
+        audit_time,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="goodStatus != null">
+        good_status,
+      </if>
+      <if test="siteId != null">
+        site_id,
+      </if>
+      <if test="reliableStatus != null">
+        reliable_status,
+      </if>
+      <if test="categoryName != null">
+        category_name,
+      </if>
+      <if test="deleteStatus != null">
+        delete_status,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="leaveNum != null">
+        leave_num,
+      </if>
+      <if test="viewNum != null">
+        view_num,
+      </if>
+      <if test="publishSite != null">
+        publish_site,
+      </if>
+      <if test="memberPhone != null">
+        member_phone,
+      </if>
+      <if test="memberName != null">
+        member_name,
+      </if>
+      <if test="memberNickname != null">
+        member_nickname,
+      </if>
+      <if test="siteName != null">
+        site_name,
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="albumPics != null">
+        #{albumPics,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="rentUnit != null">
+        #{rentUnit,jdbcType=INTEGER},
+      </if>
+      <if test="rentEachPrice != null">
+        #{rentEachPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rentLeastNum != null">
+        #{rentLeastNum,jdbcType=INTEGER},
+      </if>
+      <if test="rentLatestDate != null">
+        #{rentLatestDate,jdbcType=DATE},
+      </if>
+      <if test="productPrice != null">
+        #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditTime != null">
+        #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="goodStatus != null">
+        #{goodStatus,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null">
+        #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="reliableStatus != null">
+        #{reliableStatus,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null">
+        #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteStatus != null">
+        #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="leaveNum != null">
+        #{leaveNum,jdbcType=INTEGER},
+      </if>
+      <if test="viewNum != null">
+        #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="publishSite != null">
+        #{publishSite,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null">
+        #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNickname != null">
+        #{memberNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        #{refuseReason,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxz.rent.model.OtoProductExample" resultType="java.lang.Long">
+    select count(*) from oto_product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update oto_product
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="record.categoryId != null">
+        category_id = #{record.categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.note != null">
+        note = #{record.note,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tags != null">
+        tags = #{record.tags,jdbcType=VARCHAR},
+      </if>
+      <if test="record.albumPics != null">
+        album_pics = #{record.albumPics,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pic != null">
+        pic = #{record.pic,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rentUnit != null">
+        rent_unit = #{record.rentUnit,jdbcType=INTEGER},
+      </if>
+      <if test="record.rentEachPrice != null">
+        rent_each_price = #{record.rentEachPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.rentLeastNum != null">
+        rent_least_num = #{record.rentLeastNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.rentLatestDate != null">
+        rent_latest_date = #{record.rentLatestDate,jdbcType=DATE},
+      </if>
+      <if test="record.productPrice != null">
+        product_price = #{record.productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.auditTime != null">
+        audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.publishTime != null">
+        publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodStatus != null">
+        good_status = #{record.goodStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.siteId != null">
+        site_id = #{record.siteId,jdbcType=BIGINT},
+      </if>
+      <if test="record.reliableStatus != null">
+        reliable_status = #{record.reliableStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.categoryName != null">
+        category_name = #{record.categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deleteStatus != null">
+        delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=INTEGER},
+      </if>
+      <if test="record.leaveNum != null">
+        leave_num = #{record.leaveNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.viewNum != null">
+        view_num = #{record.viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.publishSite != null">
+        publish_site = #{record.publishSite,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberPhone != null">
+        member_phone = #{record.memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberName != null">
+        member_name = #{record.memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberNickname != null">
+        member_nickname = #{record.memberNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.siteName != null">
+        site_name = #{record.siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refuseReason != null">
+        refuse_reason = #{record.refuseReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update oto_product
+    set id = #{record.id,jdbcType=BIGINT},
+      member_id = #{record.memberId,jdbcType=BIGINT},
+      category_id = #{record.categoryId,jdbcType=BIGINT},
+      title = #{record.title,jdbcType=VARCHAR},
+      note = #{record.note,jdbcType=VARCHAR},
+      tags = #{record.tags,jdbcType=VARCHAR},
+      album_pics = #{record.albumPics,jdbcType=VARCHAR},
+      pic = #{record.pic,jdbcType=VARCHAR},
+      rent_unit = #{record.rentUnit,jdbcType=INTEGER},
+      rent_each_price = #{record.rentEachPrice,jdbcType=DECIMAL},
+      rent_least_num = #{record.rentLeastNum,jdbcType=INTEGER},
+      rent_latest_date = #{record.rentLatestDate,jdbcType=DATE},
+      product_price = #{record.productPrice,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      audit_time = #{record.auditTime,jdbcType=TIMESTAMP},
+      publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      good_status = #{record.goodStatus,jdbcType=INTEGER},
+      site_id = #{record.siteId,jdbcType=BIGINT},
+      reliable_status = #{record.reliableStatus,jdbcType=INTEGER},
+      category_name = #{record.categoryName,jdbcType=VARCHAR},
+      delete_status = #{record.deleteStatus,jdbcType=INTEGER},
+      sort = #{record.sort,jdbcType=INTEGER},
+      leave_num = #{record.leaveNum,jdbcType=INTEGER},
+      view_num = #{record.viewNum,jdbcType=INTEGER},
+      publish_site = #{record.publishSite,jdbcType=VARCHAR},
+      member_phone = #{record.memberPhone,jdbcType=VARCHAR},
+      member_name = #{record.memberName,jdbcType=VARCHAR},
+      member_nickname = #{record.memberNickname,jdbcType=VARCHAR},
+      site_name = #{record.siteName,jdbcType=VARCHAR},
+      refuse_reason = #{record.refuseReason,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxz.rent.model.OtoProduct">
+    update oto_product
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="categoryId != null">
+        category_id = #{categoryId,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="note != null">
+        note = #{note,jdbcType=VARCHAR},
+      </if>
+      <if test="tags != null">
+        tags = #{tags,jdbcType=VARCHAR},
+      </if>
+      <if test="albumPics != null">
+        album_pics = #{albumPics,jdbcType=VARCHAR},
+      </if>
+      <if test="pic != null">
+        pic = #{pic,jdbcType=VARCHAR},
+      </if>
+      <if test="rentUnit != null">
+        rent_unit = #{rentUnit,jdbcType=INTEGER},
+      </if>
+      <if test="rentEachPrice != null">
+        rent_each_price = #{rentEachPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="rentLeastNum != null">
+        rent_least_num = #{rentLeastNum,jdbcType=INTEGER},
+      </if>
+      <if test="rentLatestDate != null">
+        rent_latest_date = #{rentLatestDate,jdbcType=DATE},
+      </if>
+      <if test="productPrice != null">
+        product_price = #{productPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditTime != null">
+        audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="goodStatus != null">
+        good_status = #{goodStatus,jdbcType=INTEGER},
+      </if>
+      <if test="siteId != null">
+        site_id = #{siteId,jdbcType=BIGINT},
+      </if>
+      <if test="reliableStatus != null">
+        reliable_status = #{reliableStatus,jdbcType=INTEGER},
+      </if>
+      <if test="categoryName != null">
+        category_name = #{categoryName,jdbcType=VARCHAR},
+      </if>
+      <if test="deleteStatus != null">
+        delete_status = #{deleteStatus,jdbcType=INTEGER},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="leaveNum != null">
+        leave_num = #{leaveNum,jdbcType=INTEGER},
+      </if>
+      <if test="viewNum != null">
+        view_num = #{viewNum,jdbcType=INTEGER},
+      </if>
+      <if test="publishSite != null">
+        publish_site = #{publishSite,jdbcType=VARCHAR},
+      </if>
+      <if test="memberPhone != null">
+        member_phone = #{memberPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="memberName != null">
+        member_name = #{memberName,jdbcType=VARCHAR},
+      </if>
+      <if test="memberNickname != null">
+        member_nickname = #{memberNickname,jdbcType=VARCHAR},
+      </if>
+      <if test="siteName != null">
+        site_name = #{siteName,jdbcType=VARCHAR},
+      </if>
+      <if test="refuseReason != null">
+        refuse_reason = #{refuseReason,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxz.rent.model.OtoProduct">
+    update oto_product
+    set member_id = #{memberId,jdbcType=BIGINT},
+      category_id = #{categoryId,jdbcType=BIGINT},
+      title = #{title,jdbcType=VARCHAR},
+      note = #{note,jdbcType=VARCHAR},
+      tags = #{tags,jdbcType=VARCHAR},
+      album_pics = #{albumPics,jdbcType=VARCHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      rent_unit = #{rentUnit,jdbcType=INTEGER},
+      rent_each_price = #{rentEachPrice,jdbcType=DECIMAL},
+      rent_least_num = #{rentLeastNum,jdbcType=INTEGER},
+      rent_latest_date = #{rentLatestDate,jdbcType=DATE},
+      product_price = #{productPrice,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      audit_time = #{auditTime,jdbcType=TIMESTAMP},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      good_status = #{goodStatus,jdbcType=INTEGER},
+      site_id = #{siteId,jdbcType=BIGINT},
+      reliable_status = #{reliableStatus,jdbcType=INTEGER},
+      category_name = #{categoryName,jdbcType=VARCHAR},
+      delete_status = #{deleteStatus,jdbcType=INTEGER},
+      sort = #{sort,jdbcType=INTEGER},
+      leave_num = #{leaveNum,jdbcType=INTEGER},
+      view_num = #{viewNum,jdbcType=INTEGER},
+      publish_site = #{publishSite,jdbcType=VARCHAR},
+      member_phone = #{memberPhone,jdbcType=VARCHAR},
+      member_name = #{memberName,jdbcType=VARCHAR},
+      member_nickname = #{memberNickname,jdbcType=VARCHAR},
+      site_name = #{siteName,jdbcType=VARCHAR},
+      refuse_reason = #{refuseReason,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

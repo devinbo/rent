@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.mapper.UmsMemberKinsfolkMapper">
+  <resultMap id="BaseResultMap" type="com.xxz.rent.model.UmsMemberKinsfolk">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name1" jdbcType="VARCHAR" property="name1" />
+    <result column="sex1" jdbcType="INTEGER" property="sex1" />
+    <result column="phone1" jdbcType="VARCHAR" property="phone1" />
+    <result column="relation1" jdbcType="VARCHAR" property="relation1" />
+    <result column="name2" jdbcType="VARCHAR" property="name2" />
+    <result column="sex2" jdbcType="INTEGER" property="sex2" />
+    <result column="phone2" jdbcType="VARCHAR" property="phone2" />
+    <result column="relation2" jdbcType="VARCHAR" property="relation2" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="note1" jdbcType="VARCHAR" property="note1" />
+    <result column="note2" jdbcType="VARCHAR" property="note2" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, name1, sex1, phone1, relation1, name2, sex2, phone2, relation2, member_id, note1, 
+    note2
+  </sql>
+  <select id="selectByExample" parameterType="com.xxz.rent.model.UmsMemberKinsfolkExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ums_member_kinsfolk
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_member_kinsfolk
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ums_member_kinsfolk
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxz.rent.model.UmsMemberKinsfolkExample">
+    delete from ums_member_kinsfolk
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxz.rent.model.UmsMemberKinsfolk">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_kinsfolk (name1, sex1, phone1, 
+      relation1, name2, sex2, 
+      phone2, relation2, member_id, 
+      note1, note2)
+    values (#{name1,jdbcType=VARCHAR}, #{sex1,jdbcType=INTEGER}, #{phone1,jdbcType=VARCHAR}, 
+      #{relation1,jdbcType=VARCHAR}, #{name2,jdbcType=VARCHAR}, #{sex2,jdbcType=INTEGER}, 
+      #{phone2,jdbcType=VARCHAR}, #{relation2,jdbcType=VARCHAR}, #{memberId,jdbcType=BIGINT}, 
+      #{note1,jdbcType=VARCHAR}, #{note2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxz.rent.model.UmsMemberKinsfolk">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_kinsfolk
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="name1 != null">
+        name1,
+      </if>
+      <if test="sex1 != null">
+        sex1,
+      </if>
+      <if test="phone1 != null">
+        phone1,
+      </if>
+      <if test="relation1 != null">
+        relation1,
+      </if>
+      <if test="name2 != null">
+        name2,
+      </if>
+      <if test="sex2 != null">
+        sex2,
+      </if>
+      <if test="phone2 != null">
+        phone2,
+      </if>
+      <if test="relation2 != null">
+        relation2,
+      </if>
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="note1 != null">
+        note1,
+      </if>
+      <if test="note2 != null">
+        note2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="name1 != null">
+        #{name1,jdbcType=VARCHAR},
+      </if>
+      <if test="sex1 != null">
+        #{sex1,jdbcType=INTEGER},
+      </if>
+      <if test="phone1 != null">
+        #{phone1,jdbcType=VARCHAR},
+      </if>
+      <if test="relation1 != null">
+        #{relation1,jdbcType=VARCHAR},
+      </if>
+      <if test="name2 != null">
+        #{name2,jdbcType=VARCHAR},
+      </if>
+      <if test="sex2 != null">
+        #{sex2,jdbcType=INTEGER},
+      </if>
+      <if test="phone2 != null">
+        #{phone2,jdbcType=VARCHAR},
+      </if>
+      <if test="relation2 != null">
+        #{relation2,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="note1 != null">
+        #{note1,jdbcType=VARCHAR},
+      </if>
+      <if test="note2 != null">
+        #{note2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxz.rent.model.UmsMemberKinsfolkExample" resultType="java.lang.Long">
+    select count(*) from ums_member_kinsfolk
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ums_member_kinsfolk
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.name1 != null">
+        name1 = #{record.name1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex1 != null">
+        sex1 = #{record.sex1,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone1 != null">
+        phone1 = #{record.phone1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relation1 != null">
+        relation1 = #{record.relation1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name2 != null">
+        name2 = #{record.name2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex2 != null">
+        sex2 = #{record.sex2,jdbcType=INTEGER},
+      </if>
+      <if test="record.phone2 != null">
+        phone2 = #{record.phone2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.relation2 != null">
+        relation2 = #{record.relation2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="record.note1 != null">
+        note1 = #{record.note1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.note2 != null">
+        note2 = #{record.note2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ums_member_kinsfolk
+    set id = #{record.id,jdbcType=BIGINT},
+      name1 = #{record.name1,jdbcType=VARCHAR},
+      sex1 = #{record.sex1,jdbcType=INTEGER},
+      phone1 = #{record.phone1,jdbcType=VARCHAR},
+      relation1 = #{record.relation1,jdbcType=VARCHAR},
+      name2 = #{record.name2,jdbcType=VARCHAR},
+      sex2 = #{record.sex2,jdbcType=INTEGER},
+      phone2 = #{record.phone2,jdbcType=VARCHAR},
+      relation2 = #{record.relation2,jdbcType=VARCHAR},
+      member_id = #{record.memberId,jdbcType=BIGINT},
+      note1 = #{record.note1,jdbcType=VARCHAR},
+      note2 = #{record.note2,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxz.rent.model.UmsMemberKinsfolk">
+    update ums_member_kinsfolk
+    <set>
+      <if test="name1 != null">
+        name1 = #{name1,jdbcType=VARCHAR},
+      </if>
+      <if test="sex1 != null">
+        sex1 = #{sex1,jdbcType=INTEGER},
+      </if>
+      <if test="phone1 != null">
+        phone1 = #{phone1,jdbcType=VARCHAR},
+      </if>
+      <if test="relation1 != null">
+        relation1 = #{relation1,jdbcType=VARCHAR},
+      </if>
+      <if test="name2 != null">
+        name2 = #{name2,jdbcType=VARCHAR},
+      </if>
+      <if test="sex2 != null">
+        sex2 = #{sex2,jdbcType=INTEGER},
+      </if>
+      <if test="phone2 != null">
+        phone2 = #{phone2,jdbcType=VARCHAR},
+      </if>
+      <if test="relation2 != null">
+        relation2 = #{relation2,jdbcType=VARCHAR},
+      </if>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="note1 != null">
+        note1 = #{note1,jdbcType=VARCHAR},
+      </if>
+      <if test="note2 != null">
+        note2 = #{note2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxz.rent.model.UmsMemberKinsfolk">
+    update ums_member_kinsfolk
+    set name1 = #{name1,jdbcType=VARCHAR},
+      sex1 = #{sex1,jdbcType=INTEGER},
+      phone1 = #{phone1,jdbcType=VARCHAR},
+      relation1 = #{relation1,jdbcType=VARCHAR},
+      name2 = #{name2,jdbcType=VARCHAR},
+      sex2 = #{sex2,jdbcType=INTEGER},
+      phone2 = #{phone2,jdbcType=VARCHAR},
+      relation2 = #{relation2,jdbcType=VARCHAR},
+      member_id = #{memberId,jdbcType=BIGINT},
+      note1 = #{note1,jdbcType=VARCHAR},
+      note2 = #{note2,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

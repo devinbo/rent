@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxz.rent.mapper.UmsMemberAuthRelationMapper">
+  <resultMap id="BaseResultMap" type="com.xxz.rent.model.UmsMemberAuthRelation">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="member_id" jdbcType="BIGINT" property="memberId" />
+    <result column="identity_status" jdbcType="INTEGER" property="identityStatus" />
+    <result column="baseinfo_status" jdbcType="INTEGER" property="baseinfoStatus" />
+    <result column="kinsfolk_status" jdbcType="INTEGER" property="kinsfolkStatus" />
+    <result column="link_status" jdbcType="INTEGER" property="linkStatus" />
+    <result column="mobile_status" jdbcType="INTEGER" property="mobileStatus" />
+    <result column="taobao_status" jdbcType="INTEGER" property="taobaoStatus" />
+    <result column="study_status" jdbcType="INTEGER" property="studyStatus" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, member_id, identity_status, baseinfo_status, kinsfolk_status, link_status, mobile_status, 
+    taobao_status, study_status, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.xxz.rent.model.UmsMemberAuthRelationExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ums_member_auth_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ums_member_auth_relation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from ums_member_auth_relation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.xxz.rent.model.UmsMemberAuthRelationExample">
+    delete from ums_member_auth_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.xxz.rent.model.UmsMemberAuthRelation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_auth_relation (member_id, identity_status, baseinfo_status, 
+      kinsfolk_status, link_status, mobile_status, 
+      taobao_status, study_status, update_time
+      )
+    values (#{memberId,jdbcType=BIGINT}, #{identityStatus,jdbcType=INTEGER}, #{baseinfoStatus,jdbcType=INTEGER}, 
+      #{kinsfolkStatus,jdbcType=INTEGER}, #{linkStatus,jdbcType=INTEGER}, #{mobileStatus,jdbcType=INTEGER}, 
+      #{taobaoStatus,jdbcType=INTEGER}, #{studyStatus,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xxz.rent.model.UmsMemberAuthRelation">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into ums_member_auth_relation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        member_id,
+      </if>
+      <if test="identityStatus != null">
+        identity_status,
+      </if>
+      <if test="baseinfoStatus != null">
+        baseinfo_status,
+      </if>
+      <if test="kinsfolkStatus != null">
+        kinsfolk_status,
+      </if>
+      <if test="linkStatus != null">
+        link_status,
+      </if>
+      <if test="mobileStatus != null">
+        mobile_status,
+      </if>
+      <if test="taobaoStatus != null">
+        taobao_status,
+      </if>
+      <if test="studyStatus != null">
+        study_status,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="memberId != null">
+        #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="identityStatus != null">
+        #{identityStatus,jdbcType=INTEGER},
+      </if>
+      <if test="baseinfoStatus != null">
+        #{baseinfoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="kinsfolkStatus != null">
+        #{kinsfolkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="linkStatus != null">
+        #{linkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mobileStatus != null">
+        #{mobileStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taobaoStatus != null">
+        #{taobaoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="studyStatus != null">
+        #{studyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.xxz.rent.model.UmsMemberAuthRelationExample" resultType="java.lang.Long">
+    select count(*) from ums_member_auth_relation
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ums_member_auth_relation
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.memberId != null">
+        member_id = #{record.memberId,jdbcType=BIGINT},
+      </if>
+      <if test="record.identityStatus != null">
+        identity_status = #{record.identityStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.baseinfoStatus != null">
+        baseinfo_status = #{record.baseinfoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.kinsfolkStatus != null">
+        kinsfolk_status = #{record.kinsfolkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.linkStatus != null">
+        link_status = #{record.linkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.mobileStatus != null">
+        mobile_status = #{record.mobileStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.taobaoStatus != null">
+        taobao_status = #{record.taobaoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.studyStatus != null">
+        study_status = #{record.studyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ums_member_auth_relation
+    set id = #{record.id,jdbcType=BIGINT},
+      member_id = #{record.memberId,jdbcType=BIGINT},
+      identity_status = #{record.identityStatus,jdbcType=INTEGER},
+      baseinfo_status = #{record.baseinfoStatus,jdbcType=INTEGER},
+      kinsfolk_status = #{record.kinsfolkStatus,jdbcType=INTEGER},
+      link_status = #{record.linkStatus,jdbcType=INTEGER},
+      mobile_status = #{record.mobileStatus,jdbcType=INTEGER},
+      taobao_status = #{record.taobaoStatus,jdbcType=INTEGER},
+      study_status = #{record.studyStatus,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxz.rent.model.UmsMemberAuthRelation">
+    update ums_member_auth_relation
+    <set>
+      <if test="memberId != null">
+        member_id = #{memberId,jdbcType=BIGINT},
+      </if>
+      <if test="identityStatus != null">
+        identity_status = #{identityStatus,jdbcType=INTEGER},
+      </if>
+      <if test="baseinfoStatus != null">
+        baseinfo_status = #{baseinfoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="kinsfolkStatus != null">
+        kinsfolk_status = #{kinsfolkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="linkStatus != null">
+        link_status = #{linkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mobileStatus != null">
+        mobile_status = #{mobileStatus,jdbcType=INTEGER},
+      </if>
+      <if test="taobaoStatus != null">
+        taobao_status = #{taobaoStatus,jdbcType=INTEGER},
+      </if>
+      <if test="studyStatus != null">
+        study_status = #{studyStatus,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxz.rent.model.UmsMemberAuthRelation">
+    update ums_member_auth_relation
+    set member_id = #{memberId,jdbcType=BIGINT},
+      identity_status = #{identityStatus,jdbcType=INTEGER},
+      baseinfo_status = #{baseinfoStatus,jdbcType=INTEGER},
+      kinsfolk_status = #{kinsfolkStatus,jdbcType=INTEGER},
+      link_status = #{linkStatus,jdbcType=INTEGER},
+      mobile_status = #{mobileStatus,jdbcType=INTEGER},
+      taobao_status = #{taobaoStatus,jdbcType=INTEGER},
+      study_status = #{studyStatus,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
