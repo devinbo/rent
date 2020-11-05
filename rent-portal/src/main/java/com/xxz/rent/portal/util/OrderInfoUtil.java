@@ -36,7 +36,6 @@ public class OrderInfoUtil {
     public static String wechat_appid;
     public static String wechat_mch_id;
     public static String wechat_privateKey;
-
     public static String wechat_url;
 
 

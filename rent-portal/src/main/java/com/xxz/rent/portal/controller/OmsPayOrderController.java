@@ -99,7 +99,7 @@ public class OmsPayOrderController {
             }
             // 此处指定为App支付
             data.put("trade_type", "APP");
-            data.put("attach", back_params);
+            data.put("attach", back_params);/**/
             System.out.println(data);
             try {
                 WXPay wxpay = new WXPay(new MyWxPayConfig());

@@ -27,4 +27,6 @@ public interface OmsPayOrderService {
     OtoOrder getOtoOrderAdvanceInfo(PayAdvanceParam payAdvanceParam);
 
     OtoOrderPayment otoPayment(Long paymentId);
+
+
 }

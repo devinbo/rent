@@ -371,7 +371,6 @@ public class UmsProductApplyServiceImpl implements UmsProductApplyService {
         omsOrderItem.setFirstEachPriceSub(product.getFirstEachPriceSub());
         omsOrderItem.setProductCategoryId(product.getProductCategoryId());
 
-
         return omsOrderItem;
     }
 

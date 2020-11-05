@@ -1,11 +1,9 @@
 package com.xxz.rent.portal.component;
 
-import com.xxz.rent.common.api.CommonResult;
 import com.xxz.rent.portal.service.OmsPortalOrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**

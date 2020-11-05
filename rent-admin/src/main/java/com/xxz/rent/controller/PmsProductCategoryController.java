@@ -131,4 +131,22 @@ public class PmsProductCategoryController {
     }
 
 
+    @ApiOperation("查询所有一级分类")
+    @RequestMapping(value = "/firstList", method = RequestMethod.GET)
+    @ResponseBody
+    @PreAuthorize("hasAuthority('pms:productCategory:read')")
+    public CommonResult<List<PmsProductCategory>> firstList() {
+        List<PmsProductCategory> list = productCategoryService.firstList();
+        return CommonResult.success(list);
+    }
+
+
+    @ApiOperation("通过名称检索分类")
+    @GetMapping(value = "/search")
+    @ResponseBody
+    public CommonResult<List<PmsProductCategory>> search(String name) {
+        return CommonResult.success(productCategoryService.search(name));
+    }
+
+
 }

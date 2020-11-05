@@ -32,5 +32,7 @@ public interface PmsProductCategoryService {
 
     List<PmsProductCategoryWithChildrenItem> listWithChildren();
 
+    List<PmsProductCategory> firstList();
 
+    List<PmsProductCategory> search(String name);
 }

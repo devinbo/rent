@@ -20,8 +20,6 @@ import java.sql.SQLSyntaxErrorException;
 public class CommonExceptionHandler {
 
 
-
-
     @ExceptionHandler
     public @ResponseBody CommonResult exceptionHandler(Exception e)  {
         log.error(e.getMessage(), e);
